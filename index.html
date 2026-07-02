@@ -14,45 +14,58 @@
             margin: 0;
             padding: 0;
             color: #333;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* Barre de progression persistante en haut */
+        /* --- 7) FOND ANIMÉ D'HEXAGONES --- */
+        .bg-hexagons {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        /* --- 1) NOUVELLE BARRE POKÉDEX STYLE RETRO --- */
         .progress-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 0; left: 0; width: 100%;
             background-color: #2c3e50;
-            color: white;
-            padding: 10px 0;
+            color: #f1c40f;
+            padding: 6px 0;
             text-align: center;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             z-index: 1000;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 1px;
+            font-size: 14px;
         }
-        .progress-bar-bg {
-            width: 80%;
-            height: 12px;
-            background-color: #7f8c8d;
-            border-radius: 6px;
-            margin: 5px auto 0;
-            overflow: hidden;
+        .pokedex-title {
+            font-size: 11px;
+            color: #fff;
+            margin-bottom: 2px;
         }
-        .progress-bar-fill {
-            width: 0%;
-            height: 100%;
-            background-color: #2ecc71;
-            transition: width 0.5s ease;
+        .pokedex-squares {
+            font-size: 20px;
+            margin: 2px 0;
+            color: #2ecc71;
+        }
+        .pokedex-text {
+            font-size: 12px;
+            color: #bdc3c7;
         }
 
         .container {
             max-width: 800px;
-            margin: 70px auto 20px; /* Espace pour la barre fixe */
+            margin: 100px auto 20px; /* Plus d'espace pour la barre */
             background-color: #f5f5f5;
             border: 6px solid #34495e;
             border-radius: 20px;
             padding: 25px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            position: relative;
         }
 
         h2 {
@@ -63,91 +76,163 @@
             padding-bottom: 5px;
         }
 
-        /* --- EFFET CLIGNOTEMENT ROUGE ALERTE --- */
         .red-alert {
             color: #e74c3c;
             font-weight: bold;
             font-size: 1.5em;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
             animation: text-flash 1s infinite alternate;
         }
-        @keyframes text-flash {
-            from { opacity: 0.3; } to { opacity: 1; }
-        }
+        @keyframes text-flash { from { opacity: 0.3; } to { opacity: 1; } }
+
         .screen-flash {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: rgba(231, 76, 60, 0.4);
-            z-index: 9999; pointer-events: none;
-            animation: screen-flash-anim 0.4s 3 ease-in-out;
-            display: none;
-        }
-        @keyframes screen-flash-anim {
-            0%, 100% { opacity: 0; } 50% { opacity: 1; }
+            z-index: 9999; pointer-events: none; display: none;
         }
 
-        /* --- DIALOGUES --- */
-        .dialogue-row { display: flex; align-items: flex-start; margin: 20px 0; }
-        .avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #34495e; flex-shrink: 0; margin-right: 15px; background-color: #fff; }
-        .bubble { background-color: #fff; border: 2px solid #bdc3c7; padding: 15px; border-radius: 15px; font-size: 16px; line-height: 1.5; box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%; }
+        /* --- 3) ANIMATION PORTRAIT & DIALOGUE GLISSANT --- */
+        .dialogue-row { 
+            display: flex; 
+            align-items: flex-start; 
+            margin: 20px 0; 
+            overflow: hidden;
+        }
+        .avatar { 
+            width: 70px; height: 70px; 
+            border-radius: 50%; object-fit: cover; 
+            border: 3px solid #34495e; flex-shrink: 0; 
+            margin-right: 15px; background-color: #fff;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: pop-avatar 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .bubble { 
+            background-color: #fff; border: 2px solid #bdc3c7; 
+            padding: 15px; border-radius: 15px; 
+            font-size: 16px; line-height: 1.5; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%; 
+            transform: translateX(100vw);
+            animation: slide-bubble 0.6s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+            animation-delay: 0.2s;
+        }
         .name-tag { font-size: 12px; font-weight: bold; color: #e74c3c; margin-bottom: 5px; display: block; }
+
+        @keyframes pop-avatar { to { opacity: 1; transform: scale(1); } }
+        @keyframes slide-bubble { to { transform: translateX(0); } }
 
         /* --- COORDONNÉES GPS --- */
         .gps-box { text-align: center; margin: 25px 0; padding: 20px; background-color: #d5f5e3; border-radius: 12px; border: 3px solid #27ae60; }
         .gps-link { display: inline-block; margin-top: 10px; background-color: #27ae60; color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; text-decoration: none; font-size: 1.2em; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: transform 0.1s; }
         .gps-link:active { transform: scale(0.95); }
 
-        /* --- GRILLE INTERACTIVE GÉANTE (ADAPTÉE TABLETTE/MOBILE) --- */
+        /* --- GRILLE INTERACTIVE --- */
         .mission-box { border: 4px dashed #34495e; background-color: #eaeded; padding: 20px; margin: 30px 0; border-radius: 15px; }
         .pokemon-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
             margin: 20px 0;
+            justify-items: center;
         }
+
+        /* --- 4) & 5) DIMENSIONS ET FLOTTEMENT DOUX DES CARTES --- */
         .pokemon-card {
+            position: relative;
             border: 4px solid #bdc3c7;
             border-radius: 15px;
             padding: 10px;
             background: white;
             cursor: pointer;
             box-shadow: 0 6px 10px rgba(0,0,0,0.1);
-            transition: all 0.2s ease-in-out;
             display: flex;
             justify-content: center;
             align-items: center;
-            aspect-ratio: 1 / 1; /* Carte carrée parfaite */
+            width: 200px;  /* Modifié à 200px */
+            height: 200px; /* Modifié à 200px */
+            overflow: hidden;
+            box-sizing: border-box;
+            transition: border-color 0.3s, background-color 0.3s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Effet de flottement vivant de base */
+            animation: card-float 3s ease-in-out infinite alternate;
         }
-        .pokemon-card img {
-            width: 95%;
-            height: 95%;
-            object-fit: contain;
-        }
-        /* Animation au clic / sélection */
-        .pokemon-card.selected {
-            border-color: #e74c3c;
-            background-color: #fadbd8;
-            transform: scale(1.05) rotate(2deg);
-            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.4);
+        /* Décalage d'animation pour que toutes les cartes ne flottent pas en même temps */
+        .pokemon-grid div:nth-child(2) .pokemon-card { animation-delay: 0.5s; }
+        .pokemon-grid div:nth-child(3) .pokemon-card { animation-delay: 1s; }
+        .pokemon-grid div:nth-child(4) .pokemon-card { animation-delay: 1.5s; }
+        
+        @keyframes card-float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-4px); }
         }
 
-        /* Boutons Style Console de Jeu */
+        .pokemon-card img { width: 90%; height: 90%; object-fit: contain; }
+        
+        /* Ajustement Sélection Jaune Pokémon */
+        .pokemon-card.selected {
+            border-color: #f1c40f;
+            background-color: #fef9e7;
+            animation: none; /* Coupe le flottement lors de la sélection */
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 10px 20px rgba(241, 196, 15, 0.5);
+        }
+
+        /* --- 2) EFFET ZOOM AU CLIC SUR ANALYSER --- */
+        .pokemon-card.scanning {
+            animation: none;
+            transform: scale(1.25) !important; /* Devient plus grande */
+            z-index: 99;
+            border-color: #2ecc71;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Ligne de scan laser vert */
+        .scan-line {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 6px;
+            background: linear-gradient(to bottom, rgba(46, 204, 113, 0), rgba(46, 204, 113, 1), rgba(46, 204, 113, 0));
+            box-shadow: 0 0 12px #2ecc71, 0 0 20px #2ecc71;
+            display: none;
+            z-index: 10;
+        }
+        .scanning .scan-line {
+            display: block;
+            animation: scan-animation 0.9s ease-in-out 2 alternate; /* Fait exactement 1.8s */
+        }
+        @keyframes scan-animation { 0% { top: 0%; } 100% { top: 100%; } }
+
+        /* --- BOUTONS STYLE CONSOLE --- */
         .btn-validate {
             display: block; width: 100%; padding: 15px; margin-top: 15px; border: none; border-radius: 10px;
-            font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 5px 0 #7f8c8d; transition: all 0.1s;
+            font-weight: bold; font-size: 18px; cursor: pointer; transition: all 0.1s;
         }
         .btn-default { background-color: #95a5a6; color: white; box-shadow: 0 5px 0 #7f8c8d; }
         .btn-default:active { transform: translateY(4px); box-shadow: 0 1px 0 #7f8c8d; }
-        
         .btn-validated { background-color: #3498db; color: white; box-shadow: 0 5px 0 #2980b9; }
         .btn-validated:active { transform: translateY(4px); box-shadow: 0 1px 0 #2980b9; }
         
-        .validation-message { margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center; }
+        /* --- SYSTÈME DE TERMINAL DE RECONSTRUCTION --- */
+        .validation-message { margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center; font-family: sans-serif; }
         .msg-error { color: #c0392b; background-color: #fadbd8; padding: 10px; border-radius: 8px; }
-        .msg-success { color: #196f3d; background: #d5f5e3; padding: 15px; border-radius: 8px; border: 2px solid #2ec4b6; line-height: 1.5; }
+        
+        /* Style console informatique rétro pour l'analyse et la synchronisation */
+        .pokedex-terminal {
+            background-color: #111;
+            color: #2ecc71;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 15px 0;
+            display: none;
+        }
+        .msg-success { color: #196f3d; background: #d5f5e3; padding: 15px; border-radius: 8px; border: 2px solid #2ec4b6; line-height: 1.5; font-family: sans-serif; text-align: left;}
 
         .direction-box { background-color: #ebf5fb; border-left: 8px solid #3498db; padding: 15px; margin-top: 30px; border-radius: 4px; font-size: 16px; }
 
-        /* ÉCRAN FINAL PIKACHU ELEC */
+        /* --- 8) ÉCRAN FINAL CINÉMATIQUE JAUNE --- */
         .pikachu-victory-box {
             background: linear-gradient(135deg, #ffe135 0%, #f1c40f 100%);
             border: 5px solid #e67e22;
@@ -156,18 +241,22 @@
             text-align: center;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             margin-top: 30px;
-            animation: victory-bounce 0.5s ease infinite alternate;
+            display: none;
         }
-        @keyframes victory-bounce {
-            from { transform: translateY(0); } to { transform: translateY(-5px); }
+        .yellow-fade-screen {
+            position: fixed; top:0; left:0; width:100vw; height:100vh;
+            background-color: #f1c40f; z-index: 999; opacity: 0; pointer-events: none;
+            transition: opacity 2s ease-in-out;
         }
 
-        /* --- RESPONSIVE POUR TÉLÉPHONES --- */
+        /* RESPONSIVE PORTABLES */
         @media (max-width: 600px) {
-            .container { margin: 65px 10px 20px; padding: 15px; border-width: 4px; }
+            .container { margin: 100px 10px 20px; padding: 15px; border-width: 4px; }
             h2 { font-size: 18px; }
             .bubble { font-size: 14px; padding: 10px; }
             .avatar { width: 50px; height: 50px; }
+            /* 4) Ajustement équilibré pour mobile à 200px max */
+            .pokemon-card { width: 145px; height: 145px; }
             .pokemon-grid { gap: 10px; }
             .gps-link { font-size: 1em; width: 80%; padding: 10px; }
         }
@@ -178,15 +267,25 @@
 </head>
 <body>
 
-<!-- Effet visuel flash rouge -->
-<div id="flash-overlay" class="screen-flash"></div>
+<!-- 7) Éléments d'arrière-plan hexagone -->
+<svg class="bg-hexagons" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <defs>
+        <pattern id="hex" width="56" height="97" patternUnits="userSpaceOnUse" patternTransform="scale(1)">
+            <path d="M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z" fill="none" stroke="white" stroke-width="1"/>
+            <path d="M0 97 L28 81 L56 97" fill="none" stroke="white" stroke-width="1"/>
+        </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#hex)"/>
+</svg>
 
-<!-- Barre de progression fixe -->
+<div id="flash-overlay" class="screen-flash"></div>
+<div id="yellow-overlay" class="yellow-fade-screen"></div>
+
+<!-- 1) Nouvelle Barre de progression Pokédex -->
 <div class="progress-container">
-    <div id="progress-text">0 anomalie réparée sur 7</div>
-    <div class="progress-bar-bg">
-        <div id="progress-bar" class="progress-bar-fill"></div>
-    </div>
+    <div class="pokedex-title">⚡ POKÉDEX SYSTEM v4.0 ⚡</div>
+    <div id="pokedex-squares" class="pokedex-squares">□□□□□□□</div>
+    <div id="progress-text" class="pokedex-text">0 / 7 anomalies réparées</div>
 </div>
 
 <!-- ================= CHAPITRE 1 ================= -->
@@ -254,8 +353,9 @@
 
     <div class="mission-box">
         <div class="pokemon-grid" id="grid-ch2"></div>
+        <div class="pokedex-terminal" id="term-ch2"></div>
         <div class="validation-message" id="msg-ch2"></div>
-        <button class="btn-validate btn-default" id="btn-ch2" onclick="validateSelection(2, 'Pikachu')">Valider la réponse</button>
+        <button class="btn-validate btn-default" id="btn-ch2" onclick="startScanningProcess(2, 'Pikachu')">Analyser le Pokémon 🔎</button>
     </div>
 
     <div id="success-ch2" style="display:none;">
@@ -273,7 +373,6 @@
 <div class="container">
     <h2>Chapitre 3 – Des bulles mystérieuses</h2>
     <p class="red-alert">BIP !</p>
-    <p>À peine la première fiche corrigée, le Pokédex recommence à vibrer.</p>
 
     <div class="dialogue-row">
         <img src="cerise.png" alt="Professeur Cerise" class="avatar">
@@ -286,8 +385,9 @@
 
     <div class="mission-box">
         <div class="pokemon-grid" id="grid-ch3"></div>
+        <div class="pokedex-terminal" id="term-ch3"></div>
         <div class="validation-message" id="msg-ch3"></div>
-        <button class="btn-validate btn-default" id="btn-ch3" onclick="validateSelection(3, 'Bulbizarre')">Valider la réponse</button>
+        <button class="btn-validate btn-default" id="btn-ch3" onclick="startScanningProcess(3, 'Bulbizarre')">Analyser le Pokémon 🔎</button>
     </div>
 
     <div id="success-ch3" style="display:none;">
@@ -310,15 +410,16 @@
         <img src="cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
-            — Cette fois, le Pokédex prétend avoir trouvé un Pokémon de type Souris ! C'est impossible, même si Pikachu est une souris, « Souris » n’est pas un type de Pokémon ! Et en plus dans l’emplacement du Pokédex, je devrais trouver à cet endroit précis un Pokémon Roche.<br><br>
+            — Cette fois, le Pokédex prétend avoir trouvé un Pokémon de type Souris ! C'est impossible, même si Pikachu is une souris, « Souris » n’est pas un type de Pokémon ! Et en plus dans l’emplacement du Pokédex, je devrais trouver à cet endroit précis un Pokémon Roche.<br><br>
             Zorua a encore inversé quelque chose. Regardez bien cet animal étrange … et rappelez-vous, nous cherchons un Pokémon Roche parmi les 6 personnages suivants :
         </div>
     </div>
 
     <div class="mission-box">
         <div class="pokemon-grid" id="grid-ch4"></div>
+        <div class="pokedex-terminal" id="term-ch4"></div>
         <div class="validation-message" id="msg-ch4"></div>
-        <button class="btn-validate btn-default" id="btn-ch4" onclick="validateSelection(4, 'Racaillou')">Valider la réponse</button>
+        <button class="btn-validate btn-default" id="btn-ch4" onclick="startScanningProcess(4, 'Racaillou')">Analyser le Pokémon 🔎</button>
     </div>
 
     <div id="success-ch4" style="display:none;">
@@ -348,8 +449,9 @@
 
     <div class="mission-box">
         <div class="pokemon-grid" id="grid-ch5"></div>
+        <div class="pokedex-terminal" id="term-ch5"></div>
         <div class="validation-message" id="msg-ch5"></div>
-        <button class="btn-validate btn-default" id="btn-ch5" onclick="validateSelection(5, 'Arrozard')">Valider la réponse</button>
+        <button class="btn-validate btn-default" id="btn-ch5" onclick="startScanningProcess(5, 'Arrozard')">Analyser le Pokémon 🔎</button>
     </div>
 
     <div id="success-ch5" style="display:none;">
@@ -382,8 +484,9 @@
 
     <div class="mission-box">
         <div class="pokemon-grid" id="grid-ch6"></div>
+        <div class="pokedex-terminal" id="term-ch6"></div>
         <div class="validation-message" id="msg-ch6"></div>
-        <button class="btn-validate btn-default" id="btn-ch6" onclick="validateSelection(6, 'Rondoudou')">Valider la réponse</button>
+        <button class="btn-validate btn-default" id="btn-ch6" onclick="startScanningProcess(6, 'Rondoudou')">Analyser le Pokémon 🔎</button>
     </div>
 
     <div id="success-ch6" style="display:none;">
@@ -413,8 +516,9 @@
 
     <div class="mission-box">
         <div class="pokemon-grid" id="grid-ch7"></div>
+        <div class="pokedex-terminal" id="term-ch7"></div>
         <div class="validation-message" id="msg-ch7"></div>
-        <button class="btn-validate btn-default" id="btn-ch7" onclick="validateSelection(7, 'Groret')">Valider la réponse</button>
+        <button class="btn-validate btn-default" id="btn-ch7" onclick="startScanningProcess(7, 'Groret')">Analyser le Pokémon 🔎</button>
     </div>
 
     <div id="success-ch7" style="display:none;">
@@ -444,15 +548,18 @@
 
     <div class="mission-box">
         <div class="pokemon-grid" id="grid-ch8"></div>
+        <div class="pokedex-terminal" id="term-ch8"></div>
         <div class="validation-message" id="msg-ch8"></div>
-        <button class="btn-validate btn-default" id="btn-ch8" onclick="validateSelection(8, 'Evoli')">Valider le rébus final ⚡</button>
+        <button class="btn-validate btn-default" id="btn-ch8" onclick="startScanningProcess(8, 'Evoli')">Analyser le Pokémon 🔎</button>
     </div>
 
-    <!-- ÉCRAN FINAL DE VICTOIRE PIKACHU -->
+    <!-- 8) NOUVEL ÉCRAN DE FIN CINÉMATIQUE PROGRESSIVE -->
     <div id="success-ch8" style="display:none;">
-        <div class="pikachu-victory-box">
-            <img src="pikachu.png" alt="Pikachu" style="width:120px; height:120px; object-fit:contain; display:block; margin:0 auto 10px;" onerror="this.style.display='none';">
-            <h3 style="color:#7d6608; margin-top:0; font-size: 24px;">⚡ PIKACHU TE FÉLICITE ! ⚡</h3>
+        <div class="pokedex-terminal" id="final-reconstruction-terminal" style="display:block; font-size:16px;"></div>
+        
+        <div class="pikachu-victory-box" id="pikachu-card-victory">
+            <img src="pikachu.png" alt="Pikachu" style="width:150px; height:150px; object-fit:contain; display:block; margin:0 auto 15px;" onerror="this.style.display='none';">
+            <h3 style="color:#7d6608; margin-top:0; font-size: 26px;">⚡ PIKACHU EST LÀ ! ⚡</h3>
             <p style="color:#7d6608; font-size:16px; font-weight:bold;">
                 « Pika-Pikachuuuu ! »<br><br>
                 Magnifique les enfants, votre mission est achevée ! Vous avez réparé toutes les anomalies du Pokédex et chassé Zorua !
@@ -467,58 +574,34 @@
 </section>
 
 <script>
-    // --- DONNÉES DES CHAPITRES (Avec corrections Otaquin et munna) ---
     const CHAPTER_DATA = {
-        2: { 
-            pokemons: ['Pikachu', 'Grelaçon', 'Miasmax', 'Hexadron', 'Charibari', 'Soporifik'],
-            text: "« Une pique à choux ! Bravo les enfants, vous avez résolu l’énigme de Zorua. Rendez-vous vite au point suivant que je vous donne »"
-        },
-        3: {
-            pokemons: ['Bulbizarre', 'Gigalithe', 'Coudlangue', 'Chochodile', 'Anchwatt', 'Flamenroule'],
-            text: "« Des bulles bizarres, oui ! C’est bien ça, vous avez encore résolu l’énigme de Zorua. Mais le temps presse et d’autres Pokémon nous attendent. Vite ne perdons pas de temps ! »"
-        },
-        4: {
-            pokemons: ['Racaillou', 'Phanpy', 'Vaututrice', 'Rototaupe', 'Granbull', 'Dratatin'],
-            text: "« Un rat caillou ! En voilà une drôle d’illusion. Corrigeons vite tout ça dans le Pokédex et allons réparer l’anomalie suivante »"
-        },
-        5: {
-            pokemons: ['Arrozard', 'Feuillajou', 'Goupilou', 'Manzaï', 'Otaquin', 'Pierroteknik'], // Correction Otaquin
-            text: "« Tout une famille d’Arrozard, ça alors, je n’en avais pas vu autant dans un même endroit depuis très longtemps. Je m’en vais de ce pas envoyer l’information à Sacha et Pikachu ! Quant à vous, je pense qu’il est maintenant temps de continuer votre recherche directement dans la maison. Voici les nouvelles coordonnées :»"
-        },
-        6: {
-            pokemons: ['Rondoudou', 'Larvadar', 'Goupilou', 'Gromago', 'Rozbouton', 'Serpang'],
-            text: "« Mais bien sûr ! Une peluche c’est un doudou, et celui-là est tout rond ! C’était Rondoudou qui était caché derrière cette illusion. Je sens que nous touchons au but, encore quelques mètres, nous y sommes presque ! »"
-        },
-        7: {
-            pokemons: ['Groret', 'Couverdure', 'Mascaïman', 'Ptyranidur', 'Pyrobut', 'Nounourson'],
-            text: "« Oui, c’est bien ça ! Un « gros ré » ! Heureusement que vous saviez lire la musique, ça nous a fait gagner un temps précieux ! Allez, il ne reste quasiment plus d’interférences, je pense qu’après le prochain Pokémon vous aurez réussi votre mission. Encore un peu de courage ! »"
-        },
-        8: {
-            pokemons: ['Evoli', 'Vémini', 'Pashmilla', 'munna', 'Victini', 'Minisange'], // Correction munna
-            text: "« Des rêves au lit ! Évidemment, c’était Evoli qui se cachait sous cette dernière illusion. Magnifique les enfants, votre mission est achevée, vous avez parfaitement réussi, tous les Pokédex sont rentrés dans l’ordre ! Sacha va être fier de vous quand je vais lui raconter tout ça. »"
-        }
+        2: { pokemons: ['Pikachu', 'Grelaçon', 'Miasmax', 'Hexadron', 'Charibari', 'Soporifik'], text: "« Une pique à choux ! Bravo les enfants, vous avez résolu l’énigme de Zorua. Rendez-vous vite au point suivant que je vous donne »" },
+        3: { pokemons: ['Bulbizarre', 'Gigalithe', 'Coudlangue', 'Chochodile', 'Anchwatt', 'Flamenroule'], text: "« Des bulles bizarres, oui ! C’est bien ça, vous avez encore résolu l’énigme de Zorua. Mais le temps presse et d’autres Pokémon nous attendent. Vite ne perdons pas de temps ! »" },
+        4: { pokemons: ['Racaillou', 'Phanpy', 'Vaututrice', 'Rototaupe', 'Granbull', 'Dratatin'], text: "« Un rat caillou ! En voilà une drôle d’illusion. Corrigeons vite tout ça dans le Pokédex et allons réparer l’anomalie suivante »" },
+        5: { pokemons: ['Arrozard', 'Feuillajou', 'Goupilou', 'Manzaï', 'Otaquin', 'Pierroteknik'], text: "« Tout une famille d’Arrozard, ça alors, je n’en avais pas vu autant dans un même endroit depuis très longtemps. Je m’en vais de ce pas envoyer l’information à Sacha et Pikachu ! Quant à vous, je pense qu’il est maintenant temps de continuer votre recherche directement dans la maison. Voici les nouvelles coordonnées :»" },
+        6: { pokemons: ['Rondoudou', 'Larvadar', 'Goupilou', 'Gromago', 'Rozbouton', 'Serpang'], text: "« Mais bien sûr ! Une peluche c’est un doudou, et celui-là est tout rond ! C’était Rondoudou qui était caché derrière cette illusion. Je sens que nous touchons au but, encore quelques mètres, nous y sommes presque ! »" },
+        7: { pokemons: ['Groret', 'Couverdure', 'Mascaïman', 'Ptyranidur', 'Pyrobut', 'Nounourson'], text: "« Oui, c’est bien ça ! Un « gros ré » ! Heureusement que vous saviez lire la musique, ça nous a fait gagner un temps précieux ! Allez, il ne reste quasiment plus d’interférences, je pense qu’après le prochain Pokémon vous aurez réussi votre mission. Encore un peu de courage ! »" },
+        8: { pokemons: ['Evoli', 'Vémini', 'Pashmilla', 'munna', 'Victini', 'Minisange'], text: "« Des rêves au lit ! Évidemment, c’était Evoli qui se cachait sous cette dernière illusion. Magnifique les enfants, votre mission est achevée, vous avez parfaitement réussi, tous les Pokédex sont rentrés dans l’ordre ! Sacha va être proud de vous quand je vais lui raconter tout ça. »" }
     };
 
-    const STORAGE_KEY = 'pokemon_mission_progress_v2';
+    const STORAGE_KEY = 'pokemon_mission_progress_v3';
     let progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { currentChapter: 1, solved: {} };
 
-    // Synthétiseur audio intégré pour faire "BIP" (Pas besoin de fichier externe)
     function playBip(type = 'normal') {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = 'square';
-            osc.frequency.setValueAtTime(type === 'error' ? 150 : 880, ctx.currentTime); 
-            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            osc.frequency.setValueAtTime(type === 'error' ? 150 : (type === 'scan' ? 500 : 880), ctx.currentTime); 
+            gain.gain.setValueAtTime(0.08, ctx.currentTime);
             osc.connect(gain);
             gain.connect(ctx.destination);
             osc.start();
-            osc.stop(ctx.currentTime + (type === 'error' ? 0.3 : 0.15));
-        } catch(e) { console.log("Audio non supporté ou bloqué"); }
+            osc.stop(ctx.currentTime + (type === 'error' ? 0.3 : (type === 'scan' ? 1.8 : 0.15)));
+        } catch(e) {}
     }
 
-    // Déclencher le flash rouge de l'écran
     function triggerScreenFlash() {
         const flash = document.getElementById('flash-overlay');
         flash.style.display = 'block';
@@ -535,12 +618,10 @@
         return array;
     }
 
-    // Génération de la grille d'images géantes sans texte
     function generateGrid(chapterNum) {
         const grid = document.getElementById(`grid-ch${chapterNum}`);
         if (!grid) return;
         grid.innerHTML = '';
-
         let list = [...CHAPTER_DATA[chapterNum].pokemons];
         shuffle(list);
 
@@ -548,94 +629,167 @@
             const card = document.createElement('div');
             card.className = 'pokemon-card';
             card.setAttribute('data-name', name);
-            card.onclick = () => { playBip(); selectPokemon(chapterNum, card); };
+            card.onclick = () => { if (!progress.solved[chapterNum]) { playBip(); selectPokemon(chapterNum, card); } };
+
+            const scanLine = document.createElement('div');
+            scanLine.className = 'scan-line';
 
             const img = document.createElement('img');
             img.src = `${name.toLowerCase()}.png`;
-            img.alt = "Choix Pokémon";
+            img.alt = name;
             img.onerror = function() { 
-                this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23eee' stroke='%23ccc' stroke-width='2'/><text x='50%25' y='50%25' font-size='8' font-family='sans-serif' dominant-baseline='middle' text-anchor='middle' fill='%23e74c3c'>🔥 " + name + "</text></svg>"; 
+                this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23eee' stroke='%23ccc' stroke-width='2'/><text x='50%25' y='50%25' font-size='8' font-family='sans-serif' dominant-baseline='middle' text-anchor='middle' fill='%23e74c3c'>🔥 " + name + "</text></svg>"; 
             };
 
+            card.appendChild(scanLine);
             card.appendChild(img);
             grid.appendChild(card);
         });
     }
 
     function selectPokemon(chapterNum, cardElement) {
-        if (progress.solved[chapterNum]) return;
         const cards = document.querySelectorAll(`#grid-ch${chapterNum} .pokemon-card`);
         cards.forEach(c => c.classList.remove('selected'));
         cardElement.classList.add('selected');
-        
-        const btn = document.getElementById(`btn-ch${chapterNum}`);
-        btn.className = "btn-validate btn-validated";
+        document.getElementById(`btn-ch${chapterNum}`).className = "btn-validate btn-validated";
     }
 
-    function validateSelection(chapterNum, correctName) {
+    // --- 2) NOUVELLE CINÉMATIQUE DE SCAN ELECTRONIQUE (1.8s) ---
+    function startScanningProcess(chapterNum, correctName) {
         if (progress.solved[chapterNum]) return;
 
         const selected = document.querySelector(`#grid-ch${chapterNum} .pokemon-card.selected`);
         const msgZone = document.getElementById(`msg-ch${chapterNum}`);
+        const terminal = document.getElementById(`term-ch${chapterNum}`);
         const btn = document.getElementById(`btn-ch${chapterNum}`);
 
         if (!selected) {
             playBip('error');
             msgZone.className = "validation-message msg-error";
-            msgZone.innerText = "❌ Choisis un Pokémon sur l'écran avant de valider !";
+            msgZone.innerText = "❌ Choisis un Pokémon sur l'écran avant de l'analyser !";
             return;
         }
 
-        if (selected.getAttribute('data-name') === correctName) {
-            progress.solved[chapterNum] = true;
+        const answer = selected.getAttribute('data-name');
+        
+        // Cacher message d'erreur précédent s'il y en a un
+        msgZone.innerText = "";
+        msgZone.className = "validation-message";
+
+        // Déclencher zoom et ligne laser
+        playBip('scan');
+        selected.classList.add('scanning');
+        btn.style.display = 'none';
+
+        // Lancement du terminal d'analyse interactif
+        terminal.style.display = "block";
+        terminal.innerHTML = "POKÉDEX RESTAURÉ ░░░░░░░░░░░░░░<br>Analyse...";
+
+        setTimeout(() => { terminal.innerHTML += "<br><br>Correspondance..."; }, 400);
+        setTimeout(() => { terminal.innerHTML += "<br>Recherche..."; }, 800);
+        setTimeout(() => { terminal.innerHTML += "<br><br>⚡ 97 %"; }, 1200);
+        setTimeout(() => { terminal.innerHTML += "<br>⚡ 100 %<br><br>✓ Données restaurées"; }, 1500);
+
+        // Fin de l'analyse globale à 1.8 secondes (1800ms)
+        setTimeout(() => {
+            selected.classList.remove('scanning');
             
+            if (answer === correctName) {
+                // --- 4) AJOUT DE LA SYNCHRONISATION LABORATOIRE APRÈS SUCCÈS ---
+                terminal.innerHTML += "<br><br>...<br>Connexion au laboratoire...<br>...<br>Données synchronisées.";
+                
+                setTimeout(() => {
+                    terminal.style.display = "none";
+                    validateSelection(chapterNum, true, selected);
+                }, 1500); // Laisse le temps de lire la synchronisation
+            } else {
+                terminal.style.display = "none";
+                btn.style.display = 'block';
+                validateSelection(chapterNum, false, selected);
+            }
+        }, 1800);
+    }
+
+    function validateSelection(chapterNum, isCorrect, selectedElement) {
+        const msgZone = document.getElementById(`msg-ch${chapterNum}`);
+        const btn = document.getElementById(`btn-ch${chapterNum}`);
+
+        if (isCorrect) {
+            progress.solved[chapterNum] = true;
             msgZone.className = "validation-message msg-success";
             msgZone.innerText = CHAPTER_DATA[chapterNum].text;
 
-            btn.style.display = 'none';
-            document.getElementById(`success-ch${chapterNum}`).style.display = 'block';
-            
-            if(progress.currentChapter === chapterNum) {
-                progress.currentChapter = chapterNum + 1;
+            if(chapterNum === 8) {
+                btn.style.display = 'none';
+                document.getElementById(`success-ch8`).style.display = 'block';
+                runFinalCinematic();
+            } else {
+                document.getElementById(`success-ch${chapterNum}`).style.display = 'block';
+                if(progress.currentChapter === chapterNum) { progress.currentChapter = chapterNum + 1; }
             }
             saveProgress();
             updateProgressBar();
-            playBip();
         } else {
             playBip('error');
             triggerScreenFlash();
             msgZone.className = "validation-message msg-error";
-            msgZone.innerText = "❌ Oups, le Pokédex émet un message d’erreur ! Réessaie !";
+            msgZone.innerText = "❌ Oups, le Pokédex émet un message d’erreur ! Ce n'est pas le bon Pokémon. Réessaie !";
         }
     }
 
+    // --- 8) ULTIME CINÉMATIQUE FINALE PROGRESSIVE ---
+    function runFinalCinematic() {
+        const term = document.getElementById('final-reconstruction-terminal');
+        const victoryBox = document.getElementById('pikachu-card-victory');
+        const yellowOverlay = document.getElementById('yellow-overlay');
+
+        term.innerHTML = "██████████████████<br><br>RECONSTRUCTION DU POKÉDEX";
+        
+        setTimeout(() => { term.innerHTML += "<br><br>15 %<br>..."; }, 500);
+        setTimeout(() => { term.innerHTML += "<br><br>38 %<br>..."; }, 1000);
+        setTimeout(() => { term.innerHTML += "<br><br>67 %<br>..."; }, 1500);
+        setTimeout(() => { term.innerHTML += "<br><br>100 %"; }, 2000);
+
+        // Latence puis connexion prof Cerise
+        setTimeout(() => { term.innerHTML += "<br><br>Connexion...<br><br>Professeur Cerise...<br><br>Transmission réussie."; }, 2800);
+
+        // Alerte signal approche
+        setTimeout(() => { term.innerHTML += "<br><br>⚠️ Signal détecté !<br><br>Un Pokémon approche !"; }, 4300);
+
+        // Écran devient progressivement jaune + apparition Pikachu
+        setTimeout(() => {
+            yellowOverlay.style.opacity = "0.7"; // Flash jaune doux persistant
+            term.style.display = "none";
+            victoryBox.style.display = "block";
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }, 5800);
+    }
+
     function unlockChapter(num) {
-        if (num > progress.currentChapter) {
-            progress.currentChapter = num;
-        }
+        if (num > progress.currentChapter) { progress.currentChapter = num; }
         saveProgress();
         showProgress();
         playBip();
     }
 
-    function saveProgress() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-    }
+    function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
 
+    // --- 1) ALGORITHME DES CARRÉS DU POKÉDEX VISUEL ---
     function updateProgressBar() {
-        // Compte le nombre d'anomalies résolues (de l'étape 2 à 8, soit 7 énigmes au total)
         let solvedCount = 0;
-        for(let i=2; i<=8; i++) {
-            if(progress.solved[i]) solvedCount++;
+        for(let i=2; i<=8; i++) { if(progress.solved[i]) solvedCount++; }
+        
+        let squares = "";
+        for(let i=1; i<=7; i++) {
+            squares += (i <= solvedCount) ? "■" : "□";
         }
-        document.getElementById('progress-text').innerText = `${solvedCount} anomalie${solvedCount > 1 ? 's' : ''} réparée${solvedCount > 1 ? 's' : ''} sur 7`;
-        document.getElementById('progress-bar').style.width = `${(solvedCount / 7) * 100}%`;
+
+        document.getElementById('pokedex-squares').innerText = squares;
+        document.getElementById('progress-text').innerText = `${solvedCount} / 7 anomalies réparées`;
     }
 
     function showProgress() {
         document.querySelectorAll('.chapter-section').forEach(sec => sec.style.display = 'none');
-        
-        // Active le clignotement de l'écran si le nouveau chapitre contient une alerte visible au chargement
         let flashNeeded = false;
 
         for (let i = 1; i <= progress.currentChapter; i++) {
@@ -655,10 +809,13 @@
                     msgZone.className = "validation-message msg-success";
                     msgZone.innerText = CHAPTER_DATA[i].text;
                 }
+                if(i === 8) {
+                    document.getElementById('final-reconstruction-terminal').style.display = "none";
+                    document.getElementById('pikachu-card-victory').style.display = "block";
+                }
             }
         }
         updateProgressBar();
-        
         if (flashNeeded) { triggerScreenFlash(); }
 
         setTimeout(() => {
@@ -667,9 +824,7 @@
     }
 
     window.onload = function() {
-        for (let chId in CHAPTER_DATA) {
-            generateGrid(chId);
-        }
+        for (let chId in CHAPTER_DATA) { generateGrid(chId); }
         showProgress();
     };
 </script>
