@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang='fr'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Pokédex - Les Illusions de Zorua</title>
+    
+    <style>
+        /* --- DESIGN INSPIRÉ DU POKÉDEX NINTENDO --- */
+        body {
+            font-family: 'Arial Rounded MT Bold', 'Helvetica', sans-serif;
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 50%, #962d22 100%);
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Barre de progression persistante en haut */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .progress-bar-bg {
+            width: 80%;
+            height: 12px;
+            background-color: #7f8c8d;
+            border-radius: 6px;
+            margin: 5px auto 0;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #2ecc71;
+            transition: width 0.5s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 70px auto 20px; /* Espace pour la barre fixe */
+            background-color: #f5f5f5;
+            border: 6px solid #34495e;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-top: 20px;
+            border-bottom: 4px solid #e74c3c;
+            padding-bottom: 5px;
+        }
+
+        /* --- EFFET CLIGNOTEMENT ROUGE ALERTE --- */
+        .red-alert {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.5em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            animation: text-flash 1s infinite alternate;
+        }
+        @keyframes text-flash {
+            from { opacity: 0.3; } to { opacity: 1; }
+        }
+        .screen-flash {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: rgba(231, 76, 60, 0.4);
+            z-index: 9999; pointer-events: none;
+            animation: screen-flash-anim 0.4s 3 ease-in-out;
+            display: none;
+        }
+        @keyframes screen-flash-anim {
+            0%, 100% { opacity: 0; } 50% { opacity: 1; }
+        }
+
+        /* --- DIALOGUES --- */
+        .dialogue-row { display: flex; align-items: flex-start; margin: 20px 0; }
+        .avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #34495e; flex-shrink: 0; margin-right: 15px; background-color: #fff; }
+        .bubble { background-color: #fff; border: 2px solid #bdc3c7; padding: 15px; border-radius: 15px; font-size: 16px; line-height: 1.5; box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%; }
+        .name-tag { font-size: 12px; font-weight: bold; color: #e74c3c; margin-bottom: 5px; display: block; }
+
+        /* --- COORDONNÉES GPS --- */
+        .gps-box { text-align: center; margin: 25px 0; padding: 20px; background-color: #d5f5e3; border-radius: 12px; border: 3px solid #27ae60; }
+        .gps-link { display: inline-block; margin-top: 10px; background-color: #27ae60; color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; text-decoration: none; font-size: 1.2em; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: transform 0.1s; }
+        .gps-link:active { transform: scale(0.95); }
+
+        /* --- GRILLE INTERACTIVE GÉANTE (ADAPTÉE TABLETTE/MOBILE) --- */
+        .mission-box { border: 4px dashed #34495e; background-color: #eaeded; padding: 20px; margin: 30px 0; border-radius: 15px; }
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .pokemon-card {
+            border: 4px solid #bdc3c7;
+            border-radius: 15px;
+            padding: 10px;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            aspect-ratio: 1 / 1; /* Carte carrée parfaite */
+        }
+        .pokemon-card img {
+            width: 95%;
+            height: 95%;
+            object-fit: contain;
+        }
+        /* Animation au clic / sélection */
+        .pokemon-card.selected {
+            border-color: #e74c3c;
+            background-color: #fadbd8;
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Boutons Style Console de Jeu */
+        .btn-validate {
+            display: block; width: 100%; padding: 15px; margin-top: 15px; border: none; border-radius: 10px;
+            font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 5px 0 #7f8c8d; transition: all 0.1s;
+        }
+        .btn-default { background-color: #95a5a6; color: white; box-shadow: 0 5px 0 #7f8c8d; }
+        .btn-default:active { transform: translateY(4px); box-shadow: 0 1px 0 #7f8c8d; }
+        
+        .btn-validated { background-color: #3498db; color: white; box-shadow: 0 5px 0 #2980b9; }
+        .btn-validated:active { transform: translateY(4px); box-shadow: 0 1px 0 #2980b9; }
+        
+        .validation-message { margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center; }
+        .msg-error { color: #c0392b; background-color: #fadbd8; padding: 10px; border-radius: 8px; }
+        .msg-success { color: #196f3d; background: #d5f5e3; padding: 15px; border-radius: 8px; border: 2px solid #2ec4b6; line-height: 1.5; }
+
+        .direction-box { background-color: #ebf5fb; border-left: 8px solid #3498db; padding: 15px; margin-top: 30px; border-radius: 4px; font-size: 16px; }
+
+        /* ÉCRAN FINAL PIKACHU ELEC */
+        .pikachu-victory-box {
+            background: linear-gradient(135deg, #ffe135 0%, #f1c40f 100%);
+            border: 5px solid #e67e22;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            margin-top: 30px;
+            animation: victory-bounce 0.5s ease infinite alternate;
+        }
+        @keyframes victory-bounce {
+            from { transform: translateY(0); } to { transform: translateY(-5px); }
+        }
+
+        /* --- RESPONSIVE POUR TÉLÉPHONES --- */
+        @media (max-width: 600px) {
+            .container { margin: 65px 10px 20px; padding: 15px; border-width: 4px; }
+            h2 { font-size: 18px; }
+            .bubble { font-size: 14px; padding: 10px; }
+            .avatar { width: 50px; height: 50px; }
+            .pokemon-grid { gap: 10px; }
+            .gps-link { font-size: 1em; width: 80%; padding: 10px; }
+        }
+
+        .chapter-section { display: none; }
+        #chapitre1 { display: block; }
+    </style>
+</head>
+<body>
+
+<!-- Effet visuel flash rouge -->
+<div id="flash-overlay" class="screen-flash"></div>
+
+<!-- Barre de progression fixe -->
+<div class="progress-container">
+    <div id="progress-text">0 anomalie réparée sur 7</div>
+    <div class="progress-bar-bg">
+        <div id="progress-bar" class="progress-bar-fill"></div>
+    </div>
+</div>
+
+<!-- ================= CHAPITRE 1 ================= -->
+<section id="chapitre1" class="chapter-section">
+<div class="container">
+    <h2>Chapitre 1 – Un appel du Professeur Cerise</h2>
+    <p class="red-alert">BIP ! BIP ! BIP !</p>
+    <p>Le téléphone du laboratoire sonna si fort que le Professeur Cerise faillit laisser tomber son Pokédex.</p>
+    
+    <div class="dialogue-row">
+        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <div class="bubble">
+            <span class="name-tag">Professeur Cerise</span>
+            — Oh non… pas encore !
+        </div>
+    </div>
+
+    <p>Il regarda l'écran et poussa un profond soupir.</p>
+
+    <div class="dialogue-row">
+        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <div class="bubble">
+            <span class="name-tag">Professeur Cerise</span>
+            — C'est impossible… toutes les données de mon Pokédex ont été mélangées ! Les types des Pokémon sont faux, certains Pokémon ont disparu… et d'autres semblent avoir été transformés en objets !<br><br>
+            D'habitude, je demanderais à Sacha de venir m'aider, mais il est en mission très loin d'ici avec Pikachu. Heureusement, je connais exactement les personnes qu'il me faut !
+        </div>
+    </div>
+
+    <p>Le Professeur Cerise vous regarde avec un grand sourire.</p>
+
+    <div class="dialogue-row">
+        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <div class="bubble">
+            <span class="name-tag">Professeur Cerise</span>
+            À partir d'aujourd'hui, vous êtes officiellement mes Assistants Pokémon Temporaires ! Votre mission sera de retrouver chaque Pokémon perdu, découvrir son véritable nom et remettre son vrai type dans le Pokédex. Mais faites attention… une étrange énergie a été repérée dans les environs. Je pense que Zorua, le Pokémon Malin, s'est amusé à créer toutes ces illusions…
+        </div>
+    </div>
+
+    <p>Le Pokédex se met soudain à clignoter. Première anomalie détectée ! Direction les coordonnées indiquées !</p>
+
+    <div class="gps-box">
+        En route pour la première anomalie !🗺️<br>
+        <a href="https://www.google.com/maps/search/?api=1&query=43.613877391879065,1.332887267347382" target="_blank" class="gps-link" onclick="playBip()">C'est parti ! 🧭</a>
+    </div>
+
+    <button class="btn-validate btn-validated" onclick="unlockChapter(2)">Débloquer le Chapitre 2 🔓</button>
+</div>
+</section>
+
+<!-- ================= CHAPITRE 2 ================= -->
+<section id="chapitre2" class="chapter-section">
+<div class="container">
+    <h2>Chapitre 2 – Une drôle de plante...</h2>
+    <p class="red-alert">BIP !</p>
+    <p>Le Pokédex affiche un message inquiétant. <strong>Type détecté : SOL</strong></p>
+
+    <div class="dialogue-row">
+        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <div class="bubble">
+            <span class="name-tag">Professeur Cerise</span>
+            — Impossible ! Le signal correspond pourtant à un Pokémon qui devrait être de type Électrik ! Plus étrange encore… le Pokédex indique qu'il ressemble maintenant à un objet de jardin. Voilà sûrement une illusion de Zorua !<br><br>
+            Les enfants, ne vous laissez pas avoir par votre seule vision, et utilisez votre cerveau. Quel est cet objet, que fait-il à cet endroit précis ? Observez bien les plantes au sol, et aidez-moi à trouver dans la liste suivante quel Pokémon est prisonnier de cette drôle d'apparence.
+        </div>
+    </div>
+
+    <div class="mission-box">
+        <div class="pokemon-grid" id="grid-ch2"></div>
+        <div class="validation-message" id="msg-ch2"></div>
+        <button class="btn-validate btn-default" id="btn-ch2" onclick="validateSelection(2, 'Pikachu')">Valider la réponse</button>
+    </div>
+
+    <div id="success-ch2" style="display:none;">
+        <div class="gps-box">
+            📍 Anomalie résolue ! En route pour le point suivant :<br>
+            <a href="https://www.google.com/maps/search/?api=1&query=43.61382081254277,1.3324550627242056" target="_blank" class="gps-link" onclick="playBip()">Suivre la boussole 🧭</a>
+        </div>
+        <button class="btn-validate btn-validated" onclick="unlockChapter(3)">Passer au Chapitre 3 🔓</button>
+    </div>
+</div>
+</section>
+
+<!-- ================= CHAPITRE 3 ================= -->
+<section id="chapitre3" class="chapter-section">
+<div class="container">
+    <h2>Chapitre 3 – Des bulles mystérieuses</h2>
+    <p class="red-alert">BIP !</p>
+    <p>À peine la première fiche corrigée, le Pokédex recommence à vibrer.</p>
+
+    <div class="dialogue-row">
+        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <div class="bubble">
+            <span class="name-tag">Professeur Cerise</span>
+            Cette fois, le Pokédex annonce une anomalie avec un Pokémon de type Eau. C'est étrange… je suis presque certain que ce Pokémon est en réalité de type Plante ! Mais effectivement, celui-ci semble être dans l’eau… et qu’y a-t-il dedans ? des balles ? des boules ? des bulles ? C’est étrange.<br><br>
+            Bon, vous avez compris comment fonctionne Zorua, il se sert du vrai nom du Pokémon pour créer une illusion. Parmi ces 6 nouveaux Pokémon, lequel de type plante, pourrait ressembler à ce que nous avons sous les yeux ? Dépêchez-vous avant que l'illusion ne disparaisse !
+        </div>
+    </div>
+
+    <div class="mission-box">
+        <div class="pokemon-grid" id="grid-ch3"></div>
+        <div class="validation-message" id="msg-ch3"></div>
+        <button class="btn-validate btn-default" id="btn-ch3" onclick="validateSelection(3, 'Bulbizarre')">Valider la réponse</button>
+    </div>
+
+    <div id="success-ch3" style="display:none;">
+        <div class="gps-box">
+            📍 Direction le prochain défi GPS :<br>
+            <a href="https://www.google.com/maps/search/?api=1&query=43.613967456835155,1.3326576088022255" target="_blank" class="gps-link" onclick="playBip()">Suivre la boussole 🧭</a>
+        </div>
+        <button class="btn-validate btn-validated" onclick="unlockChapter(4)">Passer au Chapitre 4 🔓</button>
+    </div>
+</div>
+</section>
+
+<!-- ================= CHAPITRE 4 ================= -->
+<section id="chapitre4" class="chapter-section">
+<div class="container">
+    <h2>Chapitre 4 – Un rocher très suspect</h2>
+    <p class="red-alert">ALERTE ! BIP !</p>
+
+    <div class="dialogue-row">
+        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <div class="bubble">
+            <span class="name-tag">Professeur Cerise</span>
+            — Cette fois, le Pokédex prétend avoir trouvé un Pokémon de type Souris ! C'est impossible, même si Pikachu est une souris, « Souris » n’est pas un type de Pokémon ! Et en plus dans l’emplacement du Pokédex, je devrais trouver à cet endroit précis un Pokémon Roche.<br><br>
+            Zorua a encore inversé quelque chose. Regardez bien cet animal étrange … et rappelez-vous, nous cherchons un Pokémon Roche parmi les 6 personnages suivants :
+        </div>
+    </div>
+
+    <div class="mission-box">
+        <div class="pokemon-grid" id="grid-ch4"></div>
+        <div class="validation-message" id="msg-ch4"></div>
+        <button class="btn-validate btn-default" id="btn-ch4" onclick="validateSelection(4, 'Racaillou')">Valider la réponse</button>
+    </div>
+
+    <div id="success-ch4" style="display:none;">
+        <div class="gps-box">
+            📍 Anomalie corrigée ! En route pour l'étape suivante :<br>
+            <a href="https://www.google.com/maps/search/?api=1&query=43.61401941732539,1.3328091196479885" target="_blank" class="gps-link" onclick="playBip()">Suivre la boussole 🧭</a>
+        </div>
+        <button class="btn-validate btn-validated" onclick="unlockChapter(5)">Passer au Chapitre 5 🔓</button>
+    </div>
+</div>
+</section>
+
+<!-- ================= CHAPITRE 5 ================= -->
+<section id="chapitre5" class="chapter-section">
+<div class="container">
+    <h2>Chapitre 5 – Un drôle de lézard</h2>
+    <p class="red-alert">BIP !</p>
+    
+    <div class="dialogue-row">
+        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <div class="bubble">
+            <span class="name-tag">Professeur Cerise</span>
+            — Celui-ci est normalement un Pokémon de type Eau. Pourtant… Le Pokédex affiche : Type : Plastique. Plastique ?! Ça n'existe même pas ! Zorua ne se contente plus de mélanger les types… il en invente !<br><br>
+            Le signal parait pourtant assez puissant, il est possible que plusieurs Pokémon soient présents au même endroit... Peut-être une famille ? Soyez prudents les enfants, on ne sait jamais ce qui peut se passer quand des Pokémon sont en troupeau. Et n’oubliez pas, nous cherchons à retrouver le vrai Pokémon caché derrière cette illusion. Voici les candidats :
+        </div>
+    </div>
+
+    <div class="mission-box">
+        <div class="pokemon-grid" id="grid-ch5"></div>
+        <div class="validation-message" id="msg-ch5"></div>
+        <button class="btn-validate btn-default" id="btn-ch5" onclick="validateSelection(5, 'Arrozard')">Valider la réponse</button>
+    </div>
+
+    <div id="success-ch5" style="display:none;">
+        <div class="direction-box">
+            🏠 Il est maintenant temps de continuer votre recherche directement <strong>dans la maison</strong>. Rentrez à l'intérieur !
+        </div>
+        <div class="gps-box">
+            📍 Nouvelles coordonnées intérieures :<br>
+            <a href="https://www.google.com/maps/search/?api=1&query=43.61420900691622,1.3328607347447916" target="_blank" class="gps-link" onclick="playBip()">Entrer dans la maison 🧭</a>
+        </div>
+        <button class="btn-validate btn-validated" onclick="unlockChapter(6)">Passer au Chapitre 6 🔓</button>
+    </div>
+</div>
+</section>
+
+<!-- ================= CHAPITRE 6 ================= -->
+<section id="chapitre6" class="chapter-section">
+<div class="container">
+    <h2>Chapitre 6 – À l'intérieur de la maison</h2>
+    <p class="red-alert">BIP !</p>
+
+    <div class="dialogue-row">
+        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <div class="bubble">
+            <span class="name-tag">Professeur Cerise</span>
+            — Excellent travail ! Mais… attendez… Le Pokédex détecte tout de même plusieurs perturbations… à l'intérieur de la maison ! Zorua s'est sûrement réfugié à l'abri. Cherchons vite avant qu'il ne mélange encore d'autres fiches !<br><br>
+            … Bon qu’est-ce que c’est encore que ça… Une peluche en forme de ballon de basket… Vraiment je ne vois pas qui peut se cacher sous cette illusion ? Peut-être un Pokémon de type Normal… ou Fée ? Ou les deux ? Mes indications ne sont pas très claires. Je compte sur vous les enfants !
+        </div>
+    </div>
+
+    <div class="mission-box">
+        <div class="pokemon-grid" id="grid-ch6"></div>
+        <div class="validation-message" id="msg-ch6"></div>
+        <button class="btn-validate btn-default" id="btn-ch6" onclick="validateSelection(6, 'Rondoudou')">Valider la réponse</button>
+    </div>
+
+    <div id="success-ch6" style="display:none;">
+        <div class="gps-box">
+            📍 Le signal bouge dans la pièce d'à côté :<br>
+            <a href="https://www.google.com/maps/search/?api=1&query=43.61422551324654,1.33288219241672" target="_blank" class="gps-link" onclick="playBip()">Suivre la boussole 🧭</a>
+        </div>
+        <button class="btn-validate btn-validated" onclick="unlockChapter(7)">Passer au Chapitre 7 🔓</button>
+    </div>
+</div>
+</section>
+
+<!-- ================= CHAPITRE 7 ================= -->
+<section id="chapitre7" class="chapter-section">
+<div class="container">
+    <h2>Chapitre 7 – Une chanson douce</h2>
+    <p class="red-alert">BIP !</p>
+    
+    <div class="dialogue-row">
+        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <div class="bubble">
+            <span class="name-tag">Professeur Cerise</span>
+            Le signal sonore que nous recevons est très faible. Le Pokédex annonce un Pokémon de type Musique. Encore un faux type… Bon les enfants, il va falloir déterminer de quel instrument il s’agit, et dans une salle de musique ce n’est pas facile.<br><br>
+            Attendez, je vais essayer d’affiner la recherche du signal. Il semblerait que le son vienne… du piano. Est-ce que vous voyez quelque chose de particulier ? Est-ce que ça peut vous aider à identifier le Pokémon qui se cache sous l’illusion de Zorua ? Voici les 6 Pokémon affichés sur mon écran. Lequel est le bon d’après vous ?
+        </div>
+    </div>
+
+    <div class="mission-box">
+        <div class="pokemon-grid" id="grid-ch7"></div>
+        <div class="validation-message" id="msg-ch7"></div>
+        <button class="btn-validate btn-default" id="btn-ch7" onclick="validateSelection(7, 'Groret')">Valider la réponse</button>
+    </div>
+
+    <div id="success-ch7" style="display:none;">
+        <div class="gps-box">
+            📍 Presque fini ! Cap vers l'ultime interférence :<br>
+            <a href="https://www.google.com/maps/search/?api=1&query=43.61425221465368,1.3328533586700664" target="_blank" class="gps-link" onclick="playBip()">Dernière étape ! 🧭</a>
+        </div>
+        <button class="btn-validate btn-validated" onclick="unlockChapter(8)">Passer au Chapitre 8 🔓</button>
+    </div>
+</div>
+</section>
+
+<!-- ================= CHAPITRE 8 ================= -->
+<section id="chapitre8" class="chapter-section">
+<div class="container">
+    <h2>Chapitre 8 – Un songe…</h2>
+    <p class="red-alert">⚠️ ULTIME COMMUNICATON INTERROMPUE ! BIP !</p>
+    
+    <div class="dialogue-row">
+        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <div class="bubble">
+            <span class="name-tag">Professeur Cerise</span>
+            C’est la dernière anomalie... Mais ! C’est encore une peluche… sauf que celle-ci a un comportement particulier… on dirait qu’elle dort. Je pense qu’il s’agit d’une sorte de rébus. Zorua adore les devinettes... Il doit falloir comprendre ce que fait la peluche, et où elle se trouve pour percer le dernier mystère.<br><br>
+            C’est sûrement le plus compliqué, n’hésitez pas à demander de l’aide à des adultes si vous n’y arrivez pas. Ce serait dommage de rater la mission sur le dernier défi. <strong>Indice supplémentaire : il vous faudra ajouter la lettre « R » avant le nom du Pokémon pour comprendre le rébus.</strong>
+        </div>
+    </div>
+
+    <div class="mission-box">
+        <div class="pokemon-grid" id="grid-ch8"></div>
+        <div class="validation-message" id="msg-ch8"></div>
+        <button class="btn-validate btn-default" id="btn-ch8" onclick="validateSelection(8, 'Evoli')">Valider le rébus final ⚡</button>
+    </div>
+
+    <!-- ÉCRAN FINAL DE VICTOIRE PIKACHU -->
+    <div id="success-ch8" style="display:none;">
+        <div class="pikachu-victory-box">
+            <img src="pikachu.png" alt="Pikachu" style="width:120px; height:120px; object-fit:contain; display:block; margin:0 auto 10px;" onerror="this.style.display='none';">
+            <h3 style="color:#7d6608; margin-top:0; font-size: 24px;">⚡ PIKACHU TE FÉLICITE ! ⚡</h3>
+            <p style="color:#7d6608; font-size:16px; font-weight:bold;">
+                « Pika-Pikachuuuu ! »<br><br>
+                Magnifique les enfants, votre mission est achevée ! Vous avez réparé toutes les anomalies du Pokédex et chassé Zorua !
+            </p>
+            <div class="gps-box" style="background-color: white; border-color: #e67e22;">
+                🏃‍♂️ Foncez vite le retrouver en vrai aux coordonnées finales :<br>
+                <a href="https://www.google.com/maps/search/?api=1&query=43.613824505227896,1.3325428929783338" target="_blank" class="gps-link" style="background-color:#e67e22;" onclick="playBip()">RETROUVER PIKACHU ! 🧭</a>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<script>
+    // --- DONNÉES DES CHAPITRES (Avec corrections Otaquin et munna) ---
+    const CHAPTER_DATA = {
+        2: { 
+            pokemons: ['Pikachu', 'Grelaçon', 'Miasmax', 'Hexadron', 'Charibari', 'Soporifik'],
+            text: "« Une pique à choux ! Bravo les enfants, vous avez résolu l’énigme de Zorua. Rendez-vous vite au point suivant que je vous donne »"
+        },
+        3: {
+            pokemons: ['Bulbizarre', 'Gigalithe', 'Coudlangue', 'Chochodile', 'Anchwatt', 'Flamenroule'],
+            text: "« Des bulles bizarres, oui ! C’est bien ça, vous avez encore résolu l’énigme de Zorua. Mais le temps presse et d’autres Pokémon nous attendent. Vite ne perdons pas de temps ! »"
+        },
+        4: {
+            pokemons: ['Racaillou', 'Phanpy', 'Vaututrice', 'Rototaupe', 'Granbull', 'Dratatin'],
+            text: "« Un rat caillou ! En voilà une drôle d’illusion. Corrigeons vite tout ça dans le Pokédex et allons réparer l’anomalie suivante »"
+        },
+        5: {
+            pokemons: ['Arrozard', 'Feuillajou', 'Goupilou', 'Manzaï', 'Otaquin', 'Pierroteknik'], // Correction Otaquin
+            text: "« Tout une famille d’Arrozard, ça alors, je n’en avais pas vu autant dans un même endroit depuis très longtemps. Je m’en vais de ce pas envoyer l’information à Sacha et Pikachu ! Quant à vous, je pense qu’il est maintenant temps de continuer votre recherche directement dans la maison. Voici les nouvelles coordonnées :»"
+        },
+        6: {
+            pokemons: ['Rondoudou', 'Larvadar', 'Goupilou', 'Gromago', 'Rozbouton', 'Serpang'],
+            text: "« Mais bien sûr ! Une peluche c’est un doudou, et celui-là est tout rond ! C’était Rondoudou qui était caché derrière cette illusion. Je sens que nous touchons au but, encore quelques mètres, nous y sommes presque ! »"
+        },
+        7: {
+            pokemons: ['Groret', 'Couverdure', 'Mascaïman', 'Ptyranidur', 'Pyrobut', 'Nounourson'],
+            text: "« Oui, c’est bien ça ! Un « gros ré » ! Heureusement que vous saviez lire la musique, ça nous a fait gagner un temps précieux ! Allez, il ne reste quasiment plus d’interférences, je pense qu’après le prochain Pokémon vous aurez réussi votre mission. Encore un peu de courage ! »"
+        },
+        8: {
+            pokemons: ['Evoli', 'Vémini', 'Pashmilla', 'munna', 'Victini', 'Minisange'], // Correction munna
+            text: "« Des rêves au lit ! Évidemment, c’était Evoli qui se cachait sous cette dernière illusion. Magnifique les enfants, votre mission est achevée, vous avez parfaitement réussi, tous les Pokédex sont rentrés dans l’ordre ! Sacha va être fier de vous quand je vais lui raconter tout ça. »"
+        }
+    };
+
+    const STORAGE_KEY = 'pokemon_mission_progress_v2';
+    let progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { currentChapter: 1, solved: {} };
+
+    // Synthétiseur audio intégré pour faire "BIP" (Pas besoin de fichier externe)
+    function playBip(type = 'normal') {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(type === 'error' ? 150 : 880, ctx.currentTime); 
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + (type === 'error' ? 0.3 : 0.15));
+        } catch(e) { console.log("Audio non supporté ou bloqué"); }
+    }
+
+    // Déclencher le flash rouge de l'écran
+    function triggerScreenFlash() {
+        const flash = document.getElementById('flash-overlay');
+        flash.style.display = 'block';
+        setTimeout(() => { flash.style.display = 'none'; }, 1200);
+    }
+
+    function shuffle(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    // Génération de la grille d'images géantes sans texte
+    function generateGrid(chapterNum) {
+        const grid = document.getElementById(`grid-ch${chapterNum}`);
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        let list = [...CHAPTER_DATA[chapterNum].pokemons];
+        shuffle(list);
+
+        list.forEach(name => {
+            const card = document.createElement('div');
+            card.className = 'pokemon-card';
+            card.setAttribute('data-name', name);
+            card.onclick = () => { playBip(); selectPokemon(chapterNum, card); };
+
+            const img = document.createElement('img');
+            img.src = `${name.toLowerCase()}.png`;
+            img.alt = "Choix Pokémon";
+            img.onerror = function() { 
+                this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23eee' stroke='%23ccc' stroke-width='2'/><text x='50%25' y='50%25' font-size='8' font-family='sans-serif' dominant-baseline='middle' text-anchor='middle' fill='%23e74c3c'>🔥 " + name + "</text></svg>"; 
+            };
+
+            card.appendChild(img);
+            grid.appendChild(card);
+        });
+    }
+
+    function selectPokemon(chapterNum, cardElement) {
+        if (progress.solved[chapterNum]) return;
+        const cards = document.querySelectorAll(`#grid-ch${chapterNum} .pokemon-card`);
+        cards.forEach(c => c.classList.remove('selected'));
+        cardElement.classList.add('selected');
+        
+        const btn = document.getElementById(`btn-ch${chapterNum}`);
+        btn.className = "btn-validate btn-validated";
+    }
+
+    function validateSelection(chapterNum, correctName) {
+        if (progress.solved[chapterNum]) return;
+
+        const selected = document.querySelector(`#grid-ch${chapterNum} .pokemon-card.selected`);
+        const msgZone = document.getElementById(`msg-ch${chapterNum}`);
+        const btn = document.getElementById(`btn-ch${chapterNum}`);
+
+        if (!selected) {
+            playBip('error');
+            msgZone.className = "validation-message msg-error";
+            msgZone.innerText = "❌ Choisis un Pokémon sur l'écran avant de valider !";
+            return;
+        }
+
+        if (selected.getAttribute('data-name') === correctName) {
+            progress.solved[chapterNum] = true;
+            
+            msgZone.className = "validation-message msg-success";
+            msgZone.innerText = CHAPTER_DATA[chapterNum].text;
+
+            btn.style.display = 'none';
+            document.getElementById(`success-ch${chapterNum}`).style.display = 'block';
+            
+            if(progress.currentChapter === chapterNum) {
+                progress.currentChapter = chapterNum + 1;
+            }
+            saveProgress();
+            updateProgressBar();
+            playBip();
+        } else {
+            playBip('error');
+            triggerScreenFlash();
+            msgZone.className = "validation-message msg-error";
+            msgZone.innerText = "❌ Oups, le Pokédex émet un message d’erreur ! Réessaie !";
+        }
+    }
+
+    function unlockChapter(num) {
+        if (num > progress.currentChapter) {
+            progress.currentChapter = num;
+        }
+        saveProgress();
+        showProgress();
+        playBip();
+    }
+
+    function saveProgress() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    }
+
+    function updateProgressBar() {
+        // Compte le nombre d'anomalies résolues (de l'étape 2 à 8, soit 7 énigmes au total)
+        let solvedCount = 0;
+        for(let i=2; i<=8; i++) {
+            if(progress.solved[i]) solvedCount++;
+        }
+        document.getElementById('progress-text').innerText = `${solvedCount} anomalie${solvedCount > 1 ? 's' : ''} réparée${solvedCount > 1 ? 's' : ''} sur 7`;
+        document.getElementById('progress-bar').style.width = `${(solvedCount / 7) * 100}%`;
+    }
+
+    function showProgress() {
+        document.querySelectorAll('.chapter-section').forEach(sec => sec.style.display = 'none');
+        
+        // Active le clignotement de l'écran si le nouveau chapitre contient une alerte visible au chargement
+        let flashNeeded = false;
+
+        for (let i = 1; i <= progress.currentChapter; i++) {
+            const sec = document.getElementById(`chapitre${i}`);
+            if (sec) {
+                sec.style.display = 'block';
+                if (i === progress.currentChapter) flashNeeded = true;
+            }
+
+            if (progress.solved[i]) {
+                const btn = document.getElementById(`btn-ch${i}`);
+                if (btn) btn.style.display = 'none';
+                const successDiv = document.getElementById(`success-ch${i}`);
+                if (successDiv) successDiv.style.display = 'block';
+                const msgZone = document.getElementById(`msg-ch${i}`);
+                if (msgZone) {
+                    msgZone.className = "validation-message msg-success";
+                    msgZone.innerText = CHAPTER_DATA[i].text;
+                }
+            }
+        }
+        updateProgressBar();
+        
+        if (flashNeeded) { triggerScreenFlash(); }
+
+        setTimeout(() => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }, 300);
+    }
+
+    window.onload = function() {
+        for (let chId in CHAPTER_DATA) {
+            generateGrid(chId);
+        }
+        showProgress();
+    };
+</script>
+
+</body>
+</html>
