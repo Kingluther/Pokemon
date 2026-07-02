@@ -18,7 +18,7 @@
             position: relative;
         }
 
-        /* --- 7) FOND ANIMÉ D'HEXAGONES --- */
+        /* --- FOND ANIMÉ D'HEXAGONES --- */
         .bg-hexagons {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -27,7 +27,7 @@
             opacity: 0.15;
         }
 
-        /* --- 1) NOUVELLE BARRE POKÉDEX STYLE RETRO --- */
+        /* --- BARRE POKÉDEX STYLE RETRO --- */
         .progress-container {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -59,7 +59,7 @@
 
         .container {
             max-width: 800px;
-            margin: 100px auto 20px; /* Plus d'espace pour la barre */
+            margin: 100px auto 20px; 
             background-color: #f5f5f5;
             border: 6px solid #34495e;
             border-radius: 20px;
@@ -90,7 +90,7 @@
             z-index: 9999; pointer-events: none; display: none;
         }
 
-        /* --- 3) ANIMATION PORTRAIT & DIALOGUE GLISSANT --- */
+        /* --- ANIMATION PORTRAIT & DIALOGUE GLISSANT --- */
         .dialogue-row { 
             display: flex; 
             align-items: flex-start; 
@@ -135,7 +135,7 @@
             justify-items: center;
         }
 
-        /* --- 4) & 5) DIMENSIONS ET FLOTTEMENT DOUX DES CARTES --- */
+        /* --- DIMENSIONS ET FLOTTEMENT DOUX DES CARTES --- */
         .pokemon-card {
             position: relative;
             border: 4px solid #bdc3c7;
@@ -147,15 +147,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 200px;  /* Modifié à 200px */
-            height: 200px; /* Modifié à 200px */
+            width: 200px;  
+            height: 200px; 
             overflow: hidden;
             box-sizing: border-box;
             transition: border-color 0.3s, background-color 0.3s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            /* Effet de flottement vivant de base */
             animation: card-float 3s ease-in-out infinite alternate;
         }
-        /* Décalage d'animation pour que toutes les cartes ne flottent pas en même temps */
         .pokemon-grid div:nth-child(2) .pokemon-card { animation-delay: 0.5s; }
         .pokemon-grid div:nth-child(3) .pokemon-card { animation-delay: 1s; }
         .pokemon-grid div:nth-child(4) .pokemon-card { animation-delay: 1.5s; }
@@ -167,25 +165,23 @@
 
         .pokemon-card img { width: 90%; height: 90%; object-fit: contain; }
         
-        /* Ajustement Sélection Jaune Pokémon */
         .pokemon-card.selected {
             border-color: #f1c40f;
             background-color: #fef9e7;
-            animation: none; /* Coupe le flottement lors de la sélection */
+            animation: none; 
             transform: scale(1.05) rotate(2deg);
             box-shadow: 0 10px 20px rgba(241, 196, 15, 0.5);
         }
 
-        /* --- 2) EFFET ZOOM AU CLIC SUR ANALYSER --- */
+        /* --- EFFET ZOOM AU CLIC SUR ANALYSER --- */
         .pokemon-card.scanning {
             animation: none;
-            transform: scale(1.25) !important; /* Devient plus grande */
+            transform: scale(1.25) !important; 
             z-index: 99;
             border-color: #2ecc71;
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
-        /* Ligne de scan laser vert */
         .scan-line {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 6px;
@@ -196,7 +192,7 @@
         }
         .scanning .scan-line {
             display: block;
-            animation: scan-animation 0.9s ease-in-out 2 alternate; /* Fait exactement 1.8s */
+            animation: scan-animation 0.9s ease-in-out 2 alternate; 
         }
         @keyframes scan-animation { 0% { top: 0%; } 100% { top: 100%; } }
 
@@ -210,11 +206,9 @@
         .btn-validated { background-color: #3498db; color: white; box-shadow: 0 5px 0 #2980b9; }
         .btn-validated:active { transform: translateY(4px); box-shadow: 0 1px 0 #2980b9; }
         
-        /* --- SYSTÈME DE TERMINAL DE RECONSTRUCTION --- */
         .validation-message { margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center; font-family: sans-serif; }
         .msg-error { color: #c0392b; background-color: #fadbd8; padding: 10px; border-radius: 8px; }
         
-        /* Style console informatique rétro pour l'analyse et la synchronisation */
         .pokedex-terminal {
             background-color: #111;
             color: #2ecc71;
@@ -232,7 +226,7 @@
 
         .direction-box { background-color: #ebf5fb; border-left: 8px solid #3498db; padding: 15px; margin-top: 30px; border-radius: 4px; font-size: 16px; }
 
-        /* --- 8) ÉCRAN FINAL CINÉMATIQUE JAUNE --- */
+        /* --- ÉCRAN FINAL CINÉMATIQUE JAUNE --- */
         .pikachu-victory-box {
             background: linear-gradient(135deg, #ffe135 0%, #f1c40f 100%);
             border: 5px solid #e67e22;
@@ -255,7 +249,6 @@
             h2 { font-size: 18px; }
             .bubble { font-size: 14px; padding: 10px; }
             .avatar { width: 50px; height: 50px; }
-            /* 4) Ajustement équilibré pour mobile à 200px max */
             .pokemon-card { width: 145px; height: 145px; }
             .pokemon-grid { gap: 10px; }
             .gps-link { font-size: 1em; width: 80%; padding: 10px; }
@@ -267,7 +260,6 @@
 </head>
 <body>
 
-<!-- 7) Éléments d'arrière-plan hexagone -->
 <svg class="bg-hexagons" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
     <defs>
         <pattern id="hex" width="56" height="97" patternUnits="userSpaceOnUse" patternTransform="scale(1)">
@@ -281,7 +273,6 @@
 <div id="flash-overlay" class="screen-flash"></div>
 <div id="yellow-overlay" class="yellow-fade-screen"></div>
 
-<!-- 1) Nouvelle Barre de progression Pokédex -->
 <div class="progress-container">
     <div class="pokedex-title">⚡ POKÉDEX SYSTEM v4.0 ⚡</div>
     <div id="pokedex-squares" class="pokedex-squares">□□□□□□□</div>
@@ -296,7 +287,8 @@
     <p>Le téléphone du laboratoire sonna si fort que le Professeur Cerise faillit laisser tomber son Pokédex.</p>
     
     <div class="dialogue-row">
-        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <!-- Modifié : Cerise.png (Majuscule) -->
+        <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
             — Oh non… pas encore !
@@ -306,7 +298,8 @@
     <p>Il regarda l'écran et poussa un profond soupir.</p>
 
     <div class="dialogue-row">
-        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <!-- Modifié : Cerise.png (Majuscule) -->
+        <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
             — C'est impossible… toutes les données de mon Pokédex ont été mélangées ! Les types des Pokémon sont faux, certains Pokémon ont disparu… et d'autres semblent avoir été transformés en objets !<br><br>
@@ -317,7 +310,8 @@
     <p>Le Professeur Cerise vous regarde avec un grand sourire.</p>
 
     <div class="dialogue-row">
-        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <!-- Modifié : Cerise.png (Majuscule) -->
+        <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
             À partir d'aujourd'hui, vous êtes officiellement mes Assistants Pokémon Temporaires ! Votre mission sera de retrouver chaque Pokémon perdu, découvrir son véritable nom et remettre son vrai type dans le Pokédex. Mais faites attention… une étrange énergie a été repérée dans les environs. Je pense que Zorua, le Pokémon Malin, s'est amusé à créer toutes ces illusions…
@@ -343,7 +337,8 @@
     <p>Le Pokédex affiche un message inquiétant. <strong>Type détecté : SOL</strong></p>
 
     <div class="dialogue-row">
-        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <!-- Modifié : Cerise.png (Majuscule) -->
+        <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
             — Impossible ! Le signal correspond pourtant à un Pokémon qui devrait être de type Électrik ! Plus étrange encore… le Pokédex indique qu'il ressemble maintenant à un objet de jardin. Voilà sûrement une illusion de Zorua !<br><br>
@@ -375,7 +370,8 @@
     <p class="red-alert">BIP !</p>
 
     <div class="dialogue-row">
-        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <!-- Modifié : Cerise.png (Majuscule) -->
+        <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
             Cette fois, le Pokédex annonce une anomalie avec un Pokémon de type Eau. C'est étrange… je suis presque certain que ce Pokémon est en réalité de type Plante ! Mais effectivement, celui-ci semble être dans l’eau… et qu’y a-t-il dedans ? des balles ? des boules ? des bulles ? C’est étrange.<br><br>
@@ -407,10 +403,11 @@
     <p class="red-alert">ALERTE ! BIP !</p>
 
     <div class="dialogue-row">
-        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <!-- Modifié : Cerise.png (Majuscule) -->
+        <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
-            — Cette fois, le Pokédex prétend avoir trouvé un Pokémon de type Souris ! C'est impossible, même si Pikachu is une souris, « Souris » n’est pas un type de Pokémon ! Et en plus dans l’emplacement du Pokédex, je devrais trouver à cet endroit précis un Pokémon Roche.<br><br>
+            — Cette fois, le Pokédex prétend avoir trouvé un Pokémon de type Souris ! C'est impossible, même si Pikachu est une souris, « Souris » n’est pas un type de Pokémon ! Et en plus dans l’emplacement du Pokédex, je devrais trouver à cet endroit précis un Pokémon Roche.<br><br>
             Zorua a encore inversé quelque chose. Regardez bien cet animal étrange … et rappelez-vous, nous cherchons un Pokémon Roche parmi les 6 personnages suivants :
         </div>
     </div>
@@ -439,7 +436,8 @@
     <p class="red-alert">BIP !</p>
     
     <div class="dialogue-row">
-        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <!-- Modifié : Cerise.png (Majuscule) -->
+        <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
             — Celui-ci est normalement un Pokémon de type Eau. Pourtant… Le Pokédex affiche : Type : Plastique. Plastique ?! Ça n'existe même pas ! Zorua ne se contente plus de mélanger les types… il en invente !<br><br>
@@ -474,7 +472,8 @@
     <p class="red-alert">BIP !</p>
 
     <div class="dialogue-row">
-        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <!-- Modifié : Cerise.png (Majuscule) -->
+        <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
             — Excellent travail ! Mais… attendez… Le Pokédex détecte tout de même plusieurs perturbations… à l'intérieur de la maison ! Zorua s'est sûrement réfugié à l'abri. Cherchons vite avant qu'il ne mélange encore d'autres fiches !<br><br>
@@ -506,7 +505,8 @@
     <p class="red-alert">BIP !</p>
     
     <div class="dialogue-row">
-        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <!-- Modifié : Cerise.png (Majuscule) -->
+        <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
             Le signal sonore que nous recevons est très faible. Le Pokédex annonce un Pokémon de type Musique. Encore un faux type… Bon les enfants, il va falloir déterminer de quel instrument il s’agit, et dans une salle de musique ce n’est pas facile.<br><br>
@@ -538,7 +538,8 @@
     <p class="red-alert">⚠️ ULTIME COMMUNICATON INTERROMPUE ! BIP !</p>
     
     <div class="dialogue-row">
-        <img src="cerise.png" alt="Professeur Cerise" class="avatar">
+        <!-- Modifié : Cerise.png (Majuscule) -->
+        <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
             C’est la dernière anomalie... Mais ! C’est encore une peluche… sauf que celle-ci a un comportement particulier… on dirait qu’elle dort. Je pense qu’il s’agit d’une sorte de rébus. Zorua adore les devinettes... Il doit falloir comprendre ce que fait la peluche, et où elle se trouve pour percer le dernier mystère.<br><br>
@@ -553,12 +554,12 @@
         <button class="btn-validate btn-default" id="btn-ch8" onclick="startScanningProcess(8, 'Evoli')">Analyser le Pokémon 🔎</button>
     </div>
 
-    <!-- 8) NOUVEL ÉCRAN DE FIN CINÉMATIQUE PROGRESSIVE -->
     <div id="success-ch8" style="display:none;">
         <div class="pokedex-terminal" id="final-reconstruction-terminal" style="display:block; font-size:16px;"></div>
         
         <div class="pikachu-victory-box" id="pikachu-card-victory">
-            <img src="pikachu.png" alt="Pikachu" style="width:150px; height:150px; object-fit:contain; display:block; margin:0 auto 15px;" onerror="this.style.display='none';">
+            <!-- Modifié : Pikachu.png (Majuscule) -->
+            <img src="Pikachu.png" alt="Pikachu" style="width:150px; height:150px; object-fit:contain; display:block; margin:0 auto 15px;" onerror="this.style.display='none';">
             <h3 style="color:#7d6608; margin-top:0; font-size: 26px;">⚡ PIKACHU EST LÀ ! ⚡</h3>
             <p style="color:#7d6608; font-size:16px; font-weight:bold;">
                 « Pika-Pikachuuuu ! »<br><br>
@@ -581,7 +582,7 @@
         5: { pokemons: ['Arrozard', 'Feuillajou', 'Goupilou', 'Manzaï', 'Otaquin', 'Pierroteknik'], text: "« Tout une famille d’Arrozard, ça alors, je n’en avais pas vu autant dans un même endroit depuis très longtemps. Je m’en vais de ce pas envoyer l’information à Sacha et Pikachu ! Quant à vous, je pense qu’il est maintenant temps de continuer votre recherche directement dans la maison. Voici les nouvelles coordonnées :»" },
         6: { pokemons: ['Rondoudou', 'Larvadar', 'Goupilou', 'Gromago', 'Rozbouton', 'Serpang'], text: "« Mais bien sûr ! Une peluche c’est un doudou, et celui-là est tout rond ! C’était Rondoudou qui était caché derrière cette illusion. Je sens que nous touchons au but, encore quelques mètres, nous y sommes presque ! »" },
         7: { pokemons: ['Groret', 'Couverdure', 'Mascaïman', 'Ptyranidur', 'Pyrobut', 'Nounourson'], text: "« Oui, c’est bien ça ! Un « gros ré » ! Heureusement que vous saviez lire la musique, ça nous a fait gagner un temps précieux ! Allez, il ne reste quasiment plus d’interférences, je pense qu’après le prochain Pokémon vous aurez réussi votre mission. Encore un peu de courage ! »" },
-        8: { pokemons: ['Evoli', 'Vémini', 'Pashmilla', 'munna', 'Victini', 'Minisange'], text: "« Des rêves au lit ! Évidemment, c’était Evoli qui se cachait sous cette dernière illusion. Magnifique les enfants, votre mission est achevée, vous avez parfaitement réussi, tous les Pokédex sont rentrés dans l’ordre ! Sacha va être proud de vous quand je vais lui raconter tout ça. »" }
+        8: { pokemons: ['Evoli', 'Vémini', 'Pashmilla', 'munna', 'Victini', 'Minisange'], text: "« Des rêves au lit ! Évidemment, c’était Evoli qui se cachait sous cette dernière illusion. Magnifique les enfants, votre mission est achevée, tous les Pokédex sont rentrés dans l’ordre ! Sacha va être fier de vous quand je vais lui raconter tout ça. »" }
     };
 
     const STORAGE_KEY = 'pokemon_mission_progress_v3';
@@ -635,7 +636,9 @@
             scanLine.className = 'scan-line';
 
             const img = document.createElement('img');
-            img.src = `${name.toLowerCase()}.png`;
+            // Modifié : force la première lettre en Majuscule pour le fichier source .png
+            const upperName = name.charAt(0).toUpperCase() + name.slice(1);
+            img.src = `${upperName}.png`;
             img.alt = name;
             img.onerror = function() { 
                 this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23eee' stroke='%23ccc' stroke-width='2'/><text x='50%25' y='50%25' font-size='8' font-family='sans-serif' dominant-baseline='middle' text-anchor='middle' fill='%23e74c3c'>🔥 " + name + "</text></svg>"; 
@@ -654,7 +657,6 @@
         document.getElementById(`btn-ch${chapterNum}`).className = "btn-validate btn-validated";
     }
 
-    // --- 2) NOUVELLE CINÉMATIQUE DE SCAN ELECTRONIQUE (1.8s) ---
     function startScanningProcess(chapterNum, correctName) {
         if (progress.solved[chapterNum]) return;
 
@@ -671,17 +673,13 @@
         }
 
         const answer = selected.getAttribute('data-name');
-        
-        // Cacher message d'erreur précédent s'il y en a un
         msgZone.innerText = "";
         msgZone.className = "validation-message";
 
-        // Déclencher zoom et ligne laser
         playBip('scan');
         selected.classList.add('scanning');
         btn.style.display = 'none';
 
-        // Lancement du terminal d'analyse interactif
         terminal.style.display = "block";
         terminal.innerHTML = "POKÉDEX RESTAURÉ ░░░░░░░░░░░░░░<br>Analyse...";
 
@@ -690,18 +688,16 @@
         setTimeout(() => { terminal.innerHTML += "<br><br>⚡ 97 %"; }, 1200);
         setTimeout(() => { terminal.innerHTML += "<br>⚡ 100 %<br><br>✓ Données restaurées"; }, 1500);
 
-        // Fin de l'analyse globale à 1.8 secondes (1800ms)
         setTimeout(() => {
             selected.classList.remove('scanning');
             
             if (answer === correctName) {
-                // --- 4) AJOUT DE LA SYNCHRONISATION LABORATOIRE APRÈS SUCCÈS ---
                 terminal.innerHTML += "<br><br>...<br>Connexion au laboratoire...<br>...<br>Données synchronisées.";
                 
                 setTimeout(() => {
                     terminal.style.display = "none";
                     validateSelection(chapterNum, true, selected);
-                }, 1500); // Laisse le temps de lire la synchronisation
+                }, 1500); 
             } else {
                 terminal.style.display = "none";
                 btn.style.display = 'block';
@@ -729,6 +725,10 @@
             }
             saveProgress();
             updateProgressBar();
+
+            setTimeout(() => {
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 300);
         } else {
             playBip('error');
             triggerScreenFlash();
@@ -737,7 +737,6 @@
         }
     }
 
-    // --- 8) ULTIME CINÉMATIQUE FINALE PROGRESSIVE ---
     function runFinalCinematic() {
         const term = document.getElementById('final-reconstruction-terminal');
         const victoryBox = document.getElementById('pikachu-card-victory');
@@ -750,15 +749,11 @@
         setTimeout(() => { term.innerHTML += "<br><br>67 %<br>..."; }, 1500);
         setTimeout(() => { term.innerHTML += "<br><br>100 %"; }, 2000);
 
-        // Latence puis connexion prof Cerise
         setTimeout(() => { term.innerHTML += "<br><br>Connexion...<br><br>Professeur Cerise...<br><br>Transmission réussie."; }, 2800);
-
-        // Alerte signal approche
         setTimeout(() => { term.innerHTML += "<br><br>⚠️ Signal détecté !<br><br>Un Pokémon approche !"; }, 4300);
 
-        // Écran devient progressivement jaune + apparition Pikachu
         setTimeout(() => {
-            yellowOverlay.style.opacity = "0.7"; // Flash jaune doux persistant
+            yellowOverlay.style.opacity = "0.7"; 
             term.style.display = "none";
             victoryBox.style.display = "block";
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
@@ -768,13 +763,12 @@
     function unlockChapter(num) {
         if (num > progress.currentChapter) { progress.currentChapter = num; }
         saveProgress();
-        showProgress();
+        showProgress(true); 
         playBip();
     }
 
     function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
 
-    // --- 1) ALGORITHME DES CARRÉS DU POKÉDEX VISUEL ---
     function updateProgressBar() {
         let solvedCount = 0;
         for(let i=2; i<=8; i++) { if(progress.solved[i]) solvedCount++; }
@@ -788,7 +782,7 @@
         document.getElementById('progress-text').innerText = `${solvedCount} / 7 anomalies réparées`;
     }
 
-    function showProgress() {
+    function showProgress(shouldScroll = false) {
         document.querySelectorAll('.chapter-section').forEach(sec => sec.style.display = 'none');
         let flashNeeded = false;
 
@@ -818,14 +812,16 @@
         updateProgressBar();
         if (flashNeeded) { triggerScreenFlash(); }
 
-        setTimeout(() => {
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        }, 300);
+        if (shouldScroll) {
+            setTimeout(() => {
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 300);
+        }
     }
 
     window.onload = function() {
         for (let chId in CHAPTER_DATA) { generateGrid(chId); }
-        showProgress();
+        showProgress(false); 
     };
 </script>
 
