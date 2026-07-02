@@ -125,30 +125,32 @@
         .gps-link { display: inline-block; margin-top: 10px; background-color: #27ae60; color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; text-decoration: none; font-size: 1.2em; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: transform 0.1s; }
         .gps-link:active { transform: scale(0.95); }
 
-        /* --- GRILLE INTERACTIVE --- */
-        .mission-box { border: 4px dashed #34495e; background-color: #eaeded; padding: 20px; margin: 30px 0; border-radius: 15px; }
+        /* --- GRILLE INTERACTIVE AJUSTÉE --- */
+        .mission-box { border: 4px dashed #34495e; background-color: #eaeded; padding: 15px; margin: 30px 0; border-radius: 15px; }
         .pokemon-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 15px;
             margin: 20px 0;
             justify-items: center;
+            padding-right: 5px; /* Décalage préventif vers la gauche */
         }
 
-        /* --- DIMENSIONS ET CARTES --- */
+        /* --- FORMAT RECTANGLE ET TAILLE MAXIMALE DES IMAGES --- */
         .pokemon-card {
             position: relative;
             border: 4px solid #bdc3c7;
             border-radius: 15px;
-            padding: 10px;
+            padding: 5px;
             background: white;
             cursor: pointer;
             box-shadow: 0 6px 10px rgba(0,0,0,0.1);
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 200px;  
-            height: 200px; 
+            width: 100%;       /* Prend toute la largeur de sa colonne disponible */
+            max-width: 260px;  /* Limite de largeur pour garder un bel aspect */
+            height: 140px;     /* Hauteur fixe pour créer un format rectangle */
             overflow: hidden;
             box-sizing: border-box;
             transition: border-color 0.3s, background-color 0.3s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -160,22 +162,27 @@
             100% { transform: translateY(-4px); }
         }
 
-        .pokemon-card img { width: 90%; height: 90%; object-fit: contain; }
+        /* Remplit toute la hauteur disponible sans déformer */
+        .pokemon-card img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+        }
         
         .pokemon-card.selected {
             border-color: #f1c40f;
             background-color: #fef9e7;
             animation: none; 
-            transform: scale(1.05) rotate(2deg);
-            box-shadow: 0 10px 20px rgba(241, 196, 15, 0.5);
+            transform: scale(1.03) rotate(1deg);
+            box-shadow: 0 8px 15px rgba(241, 196, 15, 0.5);
         }
 
         .pokemon-card.scanning {
             animation: none;
-            transform: scale(1.25) !important; 
+            transform: scale(1.1) !important; 
             z-index: 99;
             border-color: #2ecc71;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
         .scan-line {
@@ -238,14 +245,15 @@
             transition: opacity 2s ease-in-out;
         }
 
+        /* --- RESPONSIVE MOBILE SÉCURISÉ --- */
         @media (max-width: 600px) {
-            .container { margin: 100px 10px 20px; padding: 15px; border-width: 4px; }
+            .container { margin: 90px 8px 20px; padding: 12px; border-width: 4px; }
             h2 { font-size: 18px; }
             .bubble { font-size: 14px; padding: 10px; }
-            .avatar { width: 50px; height: 50px; }
-            .pokemon-card { width: 145px; height: 145px; }
-            .pokemon-grid { gap: 10px; }
-            .gps-link { font-size: 1em; width: 80%; padding: 10px; }
+            .avatar { width: 50px; height: 50px; margin-right: 10px; }
+            .pokemon-grid { gap: 8px; padding-right: 0; }
+            .pokemon-card { height: 110px; border-width: 3px; } /* Format rectangle maintenu sur mobile */
+            .gps-link { font-size: 1em; width: 85%; padding: 10px; }
         }
 
         .chapter-section { display: none; }
@@ -268,7 +276,7 @@
 <div id="yellow-overlay" class="yellow-fade-screen"></div>
 
 <div class="progress-container">
-    <div class="pokedex-title">⚡ POKÉDEX SYSTEM v4.0 ⚡</div>
+    <div class="pokedex-title">⚡ POKÉDEX SYSTEM v4.1 ⚡</div>
     <div id="pokedex-squares" class="pokedex-squares">□□□□□□□</div>
     <div id="progress-text" class="pokedex-text">0 / 7 anomalies réparées</div>
 </div>
@@ -323,7 +331,7 @@
 <!-- ================= CHAPITRE 2 ================= -->
 <section id="chapitre2" class="chapter-section">
 <div class="container">
-    <h2>Chapitre 2 – Une drôle de plante...</h2>
+    <h2 id="title-ch2">Chapitre 2 – Une drôle de plante...</h2>
     <p class="red-alert">BIP !</p>
     <p>Le Pokédex affiche un message inquiétant. <strong>Type détecté : SOL</strong></p>
 
@@ -331,7 +339,7 @@
         <img src="cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
-            — Impossible ! Le signal correspond pourtant à un Pokémon qui devrait être de type Électrik ! Plus étrange encore… le Pokédex indique qu'il ressemble maintenant à un objet de jardin. Voilà sûrement une illusion de Zorua !<br><br>
+            — Impossible ! Le signal correspond pourtant à un Pokémon qui devrait être de type Électrik ! Plus étrange encore… le Pokédex indicates qu'il ressemble maintenant à un objet de jardin. Voilà sûrement une illusion de Zorua !<br><br>
             Les enfants, ne vous laissez pas avoir par votre seule vision, et utilisez votre cerveau. Quel est cet objet, que fait-il à cet endroit précis ? Observez bien les plantes au sol, et aidez-moi à trouver dans la liste suivante quel Pokémon est prisonnier de cette drôle d'apparence.
         </div>
     </div>
@@ -356,7 +364,7 @@
 <!-- ================= CHAPITRE 3 ================= -->
 <section id="chapitre3" class="chapter-section">
 <div class="container">
-    <h2>Chapitre 3 – Des bulles mystérieuses</h2>
+    <h2 id="title-ch3">Chapitre 3 – Des bulles mystérieuses</h2>
     <p class="red-alert">BIP !</p>
 
     <div class="dialogue-row">
@@ -388,7 +396,7 @@
 <!-- ================= CHAPITRE 4 ================= -->
 <section id="chapitre4" class="chapter-section">
 <div class="container">
-    <h2>Chapitre 4 – Un rocher très suspect</h2>
+    <h2 id="title-ch4">Chapitre 4 – Un rocher très suspect</h2>
     <p class="red-alert">ALERTE ! BIP !</p>
 
     <div class="dialogue-row">
@@ -420,7 +428,7 @@
 <!-- ================= CHAPITRE 5 ================= -->
 <section id="chapitre5" class="chapter-section">
 <div class="container">
-    <h2>Chapitre 5 – Un drôle de lézard</h2>
+    <h2 id="title-ch5">Chapitre 5 – Un drôle de lézard</h2>
     <p class="red-alert">BIP !</p>
     
     <div class="dialogue-row">
@@ -455,7 +463,7 @@
 <!-- ================= CHAPITRE 6 ================= -->
 <section id="chapitre6" class="chapter-section">
 <div class="container">
-    <h2>Chapitre 6 – À l'intérieur de la maison</h2>
+    <h2 id="title-ch6">Chapitre 6 – À l'intérieur de la maison</h2>
     <p class="red-alert">BIP !</p>
 
     <div class="dialogue-row">
@@ -487,7 +495,7 @@
 <!-- ================= CHAPITRE 7 ================= -->
 <section id="chapitre7" class="chapter-section">
 <div class="container">
-    <h2>Chapitre 7 – Une chanson douce</h2>
+    <h2 id="title-ch7">Chapitre 7 – Une chanson douce</h2>
     <p class="red-alert">BIP !</p>
     
     <div class="dialogue-row">
@@ -519,7 +527,7 @@
 <!-- ================= CHAPITRE 8 ================= -->
 <section id="chapitre8" class="chapter-section">
 <div class="container">
-    <h2>Chapitre 8 – Un songe…</h2>
+    <h2 id="title-ch8">Chapitre 8 – Un songe…</h2>
     <p class="red-alert">⚠️ ULTIME COMMUNICATON INTERROMPUE ! BIP !</p>
     
     <div class="dialogue-row">
@@ -558,7 +566,7 @@
 </section>
 
 <script>
-    // Base de données des chapitres - Tout est écrit strictement en minuscules pour les fichiers .png
+    // Base de données des chapitres
     const CHAPTER_DATA = {
         2: { 
             pokemons: [
@@ -635,7 +643,7 @@
                 { name: 'Victini', img: 'victini.png' },
                 { name: 'Minisange', img: 'minisange.png' }
             ], 
-            text: "« Des rêves au lit ! Évidemment, c’était Evoli qui se cachait sous cette dernière illusion. Magnifique les enfants, votre mission est achevée, tous les Pokédex sont rentrés dans l’ordre ! Sacha va être fier de vous quand je vais lui raconter tout ça. »" 
+            text: "« Des rêves au lit ! Évidemment, c’était Evoli qui se cachait sous cette dernière illusion. Magnifique les enfants, votre mission est achevée, tous les Pokédex sont rentrés dans l’ordre ! Sacha va être proud de vous quand je vais lui raconter tout ça. »" 
         }
     };
 
@@ -694,7 +702,7 @@
             img.src = poke.img; 
             img.alt = poke.name;
             img.onerror = function() { 
-                this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23eee' stroke='%23ccc' stroke-width='2'/><text x='50%25' y='50%25' font-size='8' font-family='sans-serif' dominant-baseline='middle' text-anchor='middle' fill='%23e74c3c'>🔥 " + poke.name + "</text></svg>"; 
+                this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='100' viewBox='0 0 100 50'><rect width='100' height='50' fill='%23eee' stroke='%23ccc' stroke-width='2'/><text x='50%25' y='50%25' font-size='7' font-family='sans-serif' dominant-baseline='middle' text-anchor='middle' fill='%23e74c3c'>🔥 " + poke.name + "</text></svg>"; 
             };
 
             card.appendChild(scanLine);
@@ -779,8 +787,9 @@
             saveProgress();
             updateProgressBar();
 
+            // S'aligne sur le message de réussite en bas du chapitre actuel
             setTimeout(() => {
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                msgZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 300);
         } else {
             playBip('error');
@@ -809,15 +818,23 @@
             yellowOverlay.style.opacity = "0.7"; 
             term.style.display = "none";
             victoryBox.style.display = "block";
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            victoryBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 5800);
     }
 
     function unlockChapter(num) {
         if (num > progress.currentChapter) { progress.currentChapter = num; }
         saveProgress();
-        showProgress(true); 
+        showProgress(false); // On met à jour l'affichage sans scroller n'importe où
         playBip();
+
+        // SCROLL RECTIFIÉ : Cible précisément le titre du nouveau chapitre ouvert
+        setTimeout(() => {
+            const nextTitle = document.getElementById(`title-ch${num}`);
+            if (nextTitle) {
+                nextTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 300);
     }
 
     function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
@@ -864,12 +881,6 @@
         }
         updateProgressBar();
         if (flashNeeded) { triggerScreenFlash(); }
-
-        if (shouldScroll) {
-            setTimeout(() => {
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            }, 300);
-        }
     }
 
     window.onload = function() {
