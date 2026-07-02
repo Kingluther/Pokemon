@@ -135,7 +135,7 @@
             justify-items: center;
         }
 
-        /* --- DIMENSIONS ET FLOTTEMENT DOUX DES CARTES --- */
+        /* --- DIMENSIONS ET CARTES --- */
         .pokemon-card {
             position: relative;
             border: 4px solid #bdc3c7;
@@ -154,9 +154,6 @@
             transition: border-color 0.3s, background-color 0.3s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             animation: card-float 3s ease-in-out infinite alternate;
         }
-        .pokemon-grid div:nth-child(2) .pokemon-card { animation-delay: 0.5s; }
-        .pokemon-grid div:nth-child(3) .pokemon-card { animation-delay: 1s; }
-        .pokemon-grid div:nth-child(4) .pokemon-card { animation-delay: 1.5s; }
         
         @keyframes card-float {
             0% { transform: translateY(0px); }
@@ -173,7 +170,6 @@
             box-shadow: 0 10px 20px rgba(241, 196, 15, 0.5);
         }
 
-        /* --- EFFET ZOOM AU CLIC SUR ANALYSER --- */
         .pokemon-card.scanning {
             animation: none;
             transform: scale(1.25) !important; 
@@ -226,7 +222,6 @@
 
         .direction-box { background-color: #ebf5fb; border-left: 8px solid #3498db; padding: 15px; margin-top: 30px; border-radius: 4px; font-size: 16px; }
 
-        /* --- ÉCRAN FINAL CINÉMATIQUE JAUNE --- */
         .pikachu-victory-box {
             background: linear-gradient(135deg, #ffe135 0%, #f1c40f 100%);
             border: 5px solid #e67e22;
@@ -243,7 +238,6 @@
             transition: opacity 2s ease-in-out;
         }
 
-        /* RESPONSIVE PORTABLES */
         @media (max-width: 600px) {
             .container { margin: 100px 10px 20px; padding: 15px; border-width: 4px; }
             h2 { font-size: 18px; }
@@ -287,7 +281,6 @@
     <p>Le téléphone du laboratoire sonna si fort que le Professeur Cerise faillit laisser tomber son Pokédex.</p>
     
     <div class="dialogue-row">
-        <!-- Modifié : Cerise.png (Majuscule) -->
         <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
@@ -298,7 +291,6 @@
     <p>Il regarda l'écran et poussa un profond soupir.</p>
 
     <div class="dialogue-row">
-        <!-- Modifié : Cerise.png (Majuscule) -->
         <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
@@ -310,7 +302,6 @@
     <p>Le Professeur Cerise vous regarde avec un grand sourire.</p>
 
     <div class="dialogue-row">
-        <!-- Modifié : Cerise.png (Majuscule) -->
         <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
@@ -337,7 +328,6 @@
     <p>Le Pokédex affiche un message inquiétant. <strong>Type détecté : SOL</strong></p>
 
     <div class="dialogue-row">
-        <!-- Modifié : Cerise.png (Majuscule) -->
         <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
@@ -347,7 +337,9 @@
     </div>
 
     <div class="mission-box">
-        <div class="pokemon-grid" id="grid-ch2"></div>
+        <div class="pokemon-grid" id="grid-ch2">
+            <!-- Rempli par JavaScript de manière mélangée avec les structures d'images complètes -->
+        </div>
         <div class="pokedex-terminal" id="term-ch2"></div>
         <div class="validation-message" id="msg-ch2"></div>
         <button class="btn-validate btn-default" id="btn-ch2" onclick="startScanningProcess(2, 'Pikachu')">Analyser le Pokémon 🔎</button>
@@ -370,7 +362,6 @@
     <p class="red-alert">BIP !</p>
 
     <div class="dialogue-row">
-        <!-- Modifié : Cerise.png (Majuscule) -->
         <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
@@ -403,7 +394,6 @@
     <p class="red-alert">ALERTE ! BIP !</p>
 
     <div class="dialogue-row">
-        <!-- Modifié : Cerise.png (Majuscule) -->
         <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
@@ -436,7 +426,6 @@
     <p class="red-alert">BIP !</p>
     
     <div class="dialogue-row">
-        <!-- Modifié : Cerise.png (Majuscule) -->
         <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
@@ -472,7 +461,6 @@
     <p class="red-alert">BIP !</p>
 
     <div class="dialogue-row">
-        <!-- Modifié : Cerise.png (Majuscule) -->
         <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
@@ -505,7 +493,6 @@
     <p class="red-alert">BIP !</p>
     
     <div class="dialogue-row">
-        <!-- Modifié : Cerise.png (Majuscule) -->
         <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
@@ -538,7 +525,6 @@
     <p class="red-alert">⚠️ ULTIME COMMUNICATON INTERROMPUE ! BIP !</p>
     
     <div class="dialogue-row">
-        <!-- Modifié : Cerise.png (Majuscule) -->
         <img src="Cerise.png" alt="Professeur Cerise" class="avatar">
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
@@ -558,7 +544,6 @@
         <div class="pokedex-terminal" id="final-reconstruction-terminal" style="display:block; font-size:16px;"></div>
         
         <div class="pikachu-victory-box" id="pikachu-card-victory">
-            <!-- Modifié : Pikachu.png (Majuscule) -->
             <img src="Pikachu.png" alt="Pikachu" style="width:150px; height:150px; object-fit:contain; display:block; margin:0 auto 15px;" onerror="this.style.display='none';">
             <h3 style="color:#7d6608; margin-top:0; font-size: 26px;">⚡ PIKACHU EST LÀ ! ⚡</h3>
             <p style="color:#7d6608; font-size:16px; font-weight:bold;">
@@ -575,14 +560,85 @@
 </section>
 
 <script>
+    // Base de données des chapitres avec le nom réel et le nom de l'image (sans accents, Majuscule au début)
     const CHAPTER_DATA = {
-        2: { pokemons: ['Pikachu', 'Grelaçon', 'Miasmax', 'Hexadron', 'Charibari', 'Soporifik'], text: "« Une pique à choux ! Bravo les enfants, vous avez résolu l’énigme de Zorua. Rendez-vous vite au point suivant que je vous donne »" },
-        3: { pokemons: ['Bulbizarre', 'Gigalithe', 'Coudlangue', 'Chochodile', 'Anchwatt', 'Flamenroule'], text: "« Des bulles bizarres, oui ! C’est bien ça, vous avez encore résolu l’énigme de Zorua. Mais le temps presse et d’autres Pokémon nous attendent. Vite ne perdons pas de temps ! »" },
-        4: { pokemons: ['Racaillou', 'Phanpy', 'Vaututrice', 'Rototaupe', 'Granbull', 'Dratatin'], text: "« Un rat caillou ! En voilà une drôle d’illusion. Corrigeons vite tout ça dans le Pokédex et allons réparer l’anomalie suivante »" },
-        5: { pokemons: ['Arrozard', 'Feuillajou', 'Goupilou', 'Manzaï', 'Otaquin', 'Pierroteknik'], text: "« Tout une famille d’Arrozard, ça alors, je n’en avais pas vu autant dans un même endroit depuis très longtemps. Je m’en vais de ce pas envoyer l’information à Sacha et Pikachu ! Quant à vous, je pense qu’il est maintenant temps de continuer votre recherche directement dans la maison. Voici les nouvelles coordonnées :»" },
-        6: { pokemons: ['Rondoudou', 'Larvadar', 'Goupilou', 'Gromago', 'Rozbouton', 'Serpang'], text: "« Mais bien sûr ! Une peluche c’est un doudou, et celui-là est tout rond ! C’était Rondoudou qui était caché derrière cette illusion. Je sens que nous touchons au but, encore quelques mètres, nous y sommes presque ! »" },
-        7: { pokemons: ['Groret', 'Couverdure', 'Mascaïman', 'Ptyranidur', 'Pyrobut', 'Nounourson'], text: "« Oui, c’est bien ça ! Un « gros ré » ! Heureusement que vous saviez lire la musique, ça nous a fait gagner un temps précieux ! Allez, il ne reste quasiment plus d’interférences, je pense qu’après le prochain Pokémon vous aurez réussi votre mission. Encore un peu de courage ! »" },
-        8: { pokemons: ['Evoli', 'Vémini', 'Pashmilla', 'munna', 'Victini', 'Minisange'], text: "« Des rêves au lit ! Évidemment, c’était Evoli qui se cachait sous cette dernière illusion. Magnifique les enfants, votre mission est achevée, tous les Pokédex sont rentrés dans l’ordre ! Sacha va être fier de vous quand je vais lui raconter tout ça. »" }
+        2: { 
+            pokemons: [
+                { name: 'Pikachu', img: 'Pikachu.png' },
+                { name: 'Grelaçon', img: 'Grelacon.png' },
+                { name: 'Miasmax', img: 'Miasmax.png' },
+                { name: 'Hexadron', img: 'Hexadron.png' },
+                { name: 'Charibari', img: 'Charibari.png' },
+                { name: 'Soporifik', img: 'Soporifik.png' }
+            ], 
+            text: "« Une pique à choux ! Bravo les enfants, vous avez résolu l’énigme de Zorua. Rendez-vous vite au point suivant que je vous donne »" 
+        },
+        3: { 
+            pokemons: [
+                { name: 'Bulbizarre', img: 'Bulbizarre.png' },
+                { name: 'Gigalithe', img: 'Gigalithe.png' },
+                { name: 'Coudlangue', img: 'Coudlangue.png' },
+                { name: 'Chochodile', img: 'Chochodile.png' },
+                { name: 'Anchwatt', img: 'Anchwatt.png' },
+                { name: 'Flamenroule', img: 'Flamenroule.png' }
+            ], 
+            text: "« Des bulles bizarres, oui ! C’est bien ça, vous avez encore résolu l’énigme de Zorua. Mais le temps presse et d’autres Pokémon nous attendent. Vite ne perdons pas de temps ! »" 
+        },
+        4: { 
+            pokemons: [
+                { name: 'Racaillou', img: 'Racaillou.png' },
+                { name: 'Phanpy', img: 'Phanpy.png' },
+                { name: 'Vaututrice', img: 'Vaututrice.png' },
+                { name: 'Rototaupe', img: 'Rototaupe.png' },
+                { name: 'Granbull', img: 'Granbull.png' },
+                { name: 'Dratatin', img: 'Dratatin.png' }
+            ], 
+            text: "« Un rat caillou ! En voilà une drôle d’illusion. Corrigeons vite tout ça dans le Pokédex et allons réparer l’anomalie suivante »" 
+        },
+        5: { 
+            pokemons: [
+                { name: 'Arrozard', img: 'Arrozard.png' },
+                { name: 'Feuillajou', img: 'Feuillajou.png' },
+                { name: 'Goupilou', img: 'Goupilou.png' },
+                { name: 'Manzaï', img: 'Manzai.png' },
+                { name: 'Otaquin', img: 'Otaquin.png' },
+                { name: 'Pierroteknik', img: 'Pierroteknik.png' }
+            ], 
+            text: "« Tout une famille d’Arrozard, ça alors, je n’en avais pas vu autant dans un même endroit depuis très longtemps. Je m’en vais de ce pas envoyer l’information à Sacha et Pikachu ! Quant à vous, je pense qu’il est maintenant temps de continuer votre recherche directement dans la maison. Voici les nouvelles coordonnées :»" 
+        },
+        6: { 
+            pokemons: [
+                { name: 'Rondoudou', img: 'Rondoudou.png' },
+                { name: 'Larvadar', img: 'Larvadar.png' },
+                { name: 'Goupilou', img: 'Goupilou.png' },
+                { name: 'Gromago', img: 'Gromago.png' },
+                { name: 'Rozbouton', img: 'Rozbouton.png' },
+                { name: 'Serpang', img: 'Serpang.png' }
+            ], 
+            text: "« Mais bien sûr ! Une peluche c’est un doudou, et celui-là est tout rond ! C’était Rondoudou qui était caché derrière cette illusion. Je sens que nous touchons au but, encore quelques mètres, nous y sommes presque ! »" 
+        },
+        7: { 
+            pokemons: [
+                { name: 'Groret', img: 'Groret.png' },
+                { name: 'Couverdure', img: 'Couverdure.png' },
+                { name: 'Mascaïman', img: 'Mascaiman.png' },
+                { name: 'Ptyranidur', img: 'Ptyranidur.png' },
+                { name: 'Pyrobut', img: 'Pyrobut.png' },
+                { name: 'Nounourson', img: 'Nounourson.png' }
+            ], 
+            text: "« Oui, c’est bien ça ! Un « gros ré » ! Heureusement que vous saviez lire la musique, ça nous a fait gagner un temps précieux ! Allez, il ne reste quasiment plus d’interférences, je pense qu’après le prochain Pokémon vous aurez réussi votre mission. Encore un peu de courage ! »" 
+        },
+        8: { 
+            pokemons: [
+                { name: 'Evoli', img: 'Evoli.png' },
+                { name: 'Vémini', img: 'Vemini.png' },
+                { name: 'Pashmilla', img: 'Pashmilla.png' },
+                { name: 'Munna', img: 'Munna.png' },
+                { name: 'Victini', img: 'Victini.png' },
+                { name: 'Minisange', img: 'Minisange.png' }
+            ], 
+            text: "« Des rêves au lit ! Évidemment, c’était Evoli qui se cachait sous cette dernière illusion. Magnifique les enfants, votre mission est achevée, tous les Pokédex sont rentrés dans l’ordre ! Sacha va être fier de vous quand je vais lui raconter tout ça. »" 
+        }
     };
 
     const STORAGE_KEY = 'pokemon_mission_progress_v3';
@@ -623,25 +679,25 @@
         const grid = document.getElementById(`grid-ch${chapterNum}`);
         if (!grid) return;
         grid.innerHTML = '';
+        
+        // On récupère et mélange la liste d'objets Pokémon (contient name et img)
         let list = [...CHAPTER_DATA[chapterNum].pokemons];
         shuffle(list);
 
-        list.forEach(name => {
+        list.forEach(poke => {
             const card = document.createElement('div');
             card.className = 'pokemon-card';
-            card.setAttribute('data-name', name);
+            card.setAttribute('data-name', poke.name);
             card.onclick = () => { if (!progress.solved[chapterNum]) { playBip(); selectPokemon(chapterNum, card); } };
 
             const scanLine = document.createElement('div');
             scanLine.className = 'scan-line';
 
             const img = document.createElement('img');
-            // Modifié : force la première lettre en Majuscule pour le fichier source .png
-            const upperName = name.charAt(0).toUpperCase() + name.slice(1);
-            img.src = `${upperName}.png`;
-            img.alt = name;
+            img.src = poke.img; // Exemple: Pikachu.png, Grelacon.png (Majuscule stricte)
+            img.alt = poke.name;
             img.onerror = function() { 
-                this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23eee' stroke='%23ccc' stroke-width='2'/><text x='50%25' y='50%25' font-size='8' font-family='sans-serif' dominant-baseline='middle' text-anchor='middle' fill='%23e74c3c'>🔥 " + name + "</text></svg>"; 
+                this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23eee' stroke='%23ccc' stroke-width='2'/><text x='50%25' y='50%25' font-size='8' font-family='sans-serif' dominant-baseline='middle' text-anchor='middle' fill='%23e74c3c'>🔥 " + poke.name + "</text></svg>"; 
             };
 
             card.appendChild(scanLine);
