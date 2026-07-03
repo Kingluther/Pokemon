@@ -211,7 +211,6 @@
             background-color: #f1c40f; z-index: 99999; opacity: 0; pointer-events: none;
         }
         
-        /* Classe d'animation déclenchée à la victoire (3 éclairs puis disparition totale) */
         .lightning-flash-active {
             animation: pikachu-thunderbolt 1.6s ease-out forwards;
         }
@@ -223,7 +222,7 @@
             40% { opacity: 0.9; }
             50% { opacity: 0.1; }
             65% { opacity: 0.95; }
-            100% { opacity: 0; } /* Revient à 0 pour ne pas gêner la lecture */
+            100% { opacity: 0; }
         }
 
         /* --- RESPONSIVE OPTIMISÉ POUR PORTABLES ET TABLETTES --- */
@@ -268,7 +267,7 @@
 <div id="yellow-overlay" class="yellow-fade-screen"></div>
 
 <div class="progress-container">
-    <div class="pokedex-title">⚡ POKÉDEX SYSTEM v4.5 ⚡</div>
+    <div class="pokedex-title">⚡ POKÉDEX SYSTEM v4.6 ⚡</div>
     <div id="pokedex-squares" class="pokedex-squares">□□□□□□□</div>
     <div id="progress-text" class="pokedex-text">0 / 7 anomalies réparées</div>
 </div>
@@ -749,11 +748,17 @@
             setTimeout(() => { termContent.innerHTML += "<br><br>100 %<br><br>Connexion sécurisée avec le Labo Cerise établie."; }, 3200);
             setTimeout(() => { termContent.innerHTML += "<br><br>⚠️ Avertissement !<br>Signal extrêmement puissant détecté en approche !"; }, 4800);
         } else {
+            // NOUVEAU : GÉNÉRATION DES POURCENTAGES ALÉATOIRES
+            const pct1 = Math.floor(Math.random() * (60 - 25 + 1)) + 25;
+            const pct2 = Math.floor(Math.random() * (80 - 61 + 1)) + 61;
+            
             termContent.innerHTML = "POKÉDEX RESTAURÉ ░░░░░░░░░░░░░░<br><br>Lancement de l'analyse visuelle...";
             setTimeout(() => { termContent.innerHTML += "<br><br>Lecture du Type et du Nom de la carte..."; }, 800);
-            setTimeout(() => { termContent.innerHTML += "<br>Comparaison avec la base de données..."; }, 1800);
-            setTimeout(() => { termContent.innerHTML += "<br><br>⚡ Traitement : 97 %"; }, 2800);
-            setTimeout(() => { termContent.innerHTML += "<br>⚡ Traitement : 100 %<br><br>✓ Scan du Pokémon terminé."; }, 3500);
+            setTimeout(() => { termContent.innerHTML += "<br>Comparaison avec la base de données..."; }, 1500);
+            // Affichage des trois paliers
+            setTimeout(() => { termContent.innerHTML += "<br><br>⚡ Traitement : " + pct1 + " %"; }, 2200);
+            setTimeout(() => { termContent.innerHTML += "<br>⚡ Traitement : " + pct2 + " %"; }, 2900);
+            setTimeout(() => { termContent.innerHTML += "<br>⚡ Traitement : 100 %<br><br>✓ Scan du Pokémon terminé."; }, 3600);
         }
 
         const waitTime = (chapterNum === 8 && answer === correctName) ? 6500 : 4500;
@@ -802,12 +807,10 @@
         }
     }
 
-    // FONCTION MISE À JOUR : SCINTILLEMENT DE L'ATTAQUE TONNERRE PUIS DISPARITION
     function showVictory() {
         const victoryBox = document.getElementById('pikachu-card-victory');
         const yellowOverlay = document.getElementById('yellow-overlay');
 
-        // Déclenche l'animation de flashs successifs
         yellowOverlay.classList.add('lightning-flash-active');
         
         victoryBox.style.display = "block";
