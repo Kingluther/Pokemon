@@ -108,7 +108,7 @@
             justify-items: center;
         }
 
-        /* --- NOUVEAU FORMAT : PORTRAIT 3/4 --- */
+        /* --- SÉCURISATION DU FORMAT PORTRAIT (APPLICABLE PARTOUT) --- */
         .pokemon-card {
             position: relative;
             border: 4px solid #bdc3c7;
@@ -120,29 +120,29 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            aspect-ratio: 3 / 4; /* FORMAT CARTE PORTRAIT */
+            max-width: 240px; /* Évite l'étirement excessif sur tablette */
+            aspect-ratio: 2 / 3; /* FORCE LE FORMAT PORTRAIT (TYPE EN HAUT, NOM EN BAS) */
             height: auto; 
-            padding: 5px; /* Petit espacement interne pour ne pas coller aux bords */
+            padding: 4px; 
             box-sizing: border-box;
             transition: border-color 0.3s, background-color 0.3s, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            /* z-index de base */
             z-index: 1;
         }
 
-        /* L'image prend 100% sans être rognée */
+        /* Intégralité de la carte visible sans rognage */
         .pokemon-card img { 
             width: 100%; 
             height: 100%; 
-            object-fit: contain; /* L'image s'ajuste parfaitement sans rien couper */
+            object-fit: contain; /* L'image s'adapte entièrement à l'espace sans déborder ni être coupée */
         }
         
-        /* ZOOM PRONONCÉ AU CLIC POUR LISIBILITÉ */
+        /* ZOOM DE SÉLECTION PENSÉ POUR ÉCRAN TACTILE */
         .pokemon-card.selected {
             border-color: #f1c40f;
             background-color: #fef9e7;
-            transform: scale(1.15) rotate(1deg); /* Zoom important pour bien lire le texte */
+            transform: scale(1.15) rotate(1deg); /* Grossissement prononcé pour une lisibilité maximale */
             box-shadow: 0 15px 30px rgba(241, 196, 15, 0.6);
-            z-index: 10; /* Passe par dessus les autres cartes */
+            z-index: 10; /* Passe au premier plan */
         }
 
         .scan-line {
@@ -154,7 +154,6 @@
             z-index: 20;
         }
         
-        /* Animation du scan */
         .scanning .scan-line {
             display: block;
             animation: scan-animation 0.8s ease-in-out infinite alternate; 
@@ -175,23 +174,23 @@
         .msg-error { color: #c0392b; background-color: #fadbd8; padding: 10px; border-radius: 8px; }
         .msg-success { color: #196f3d; background: #d5f5e3; padding: 15px; border-radius: 8px; border: 2px solid #2ec4b6; line-height: 1.5; font-family: sans-serif; text-align: left;}
 
-        /* --- TERMINAL POP-UP PLEIN ÉCRAN --- */
+        /* --- SPÉCIAL INTERFACE PLEIN ÉCRAN LORS DU SCAN --- */
         .fullscreen-terminal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: rgba(17, 17, 17, 0.98);
             z-index: 10000;
-            display: none; /* Masqué par défaut */
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 24px;
             box-sizing: border-box;
         }
         .terminal-box {
             color: #2ecc71;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 18px; /* Texte plus grand pour mobile */
+            font-size: 18px;
             line-height: 1.8;
             text-align: left;
             width: 100%;
@@ -213,17 +212,22 @@
             transition: opacity 2s ease-in-out;
         }
 
-        /* --- RESPONSIVE MOBILE --- */
+        /* --- RESPONSIVE OPTIMISÉ POUR PORTABLES ET TABLETTES --- */
         @media (max-width: 600px) {
             .container { margin: 90px 8px 20px; padding: 12px; border-width: 4px; }
             h2 { font-size: 18px; }
             .bubble { font-size: 14px; padding: 10px; }
             .avatar { width: 50px; height: 50px; margin-right: 10px; }
-            .pokemon-grid { gap: 10px; }
-            /* Sur mobile, on garde le format carte mais on allège les bordures */
-            .pokemon-card { border-width: 3px; border-radius: 8px; padding: 3px; }
+            .pokemon-grid { gap: 12px; }
+            .pokemon-card { border-width: 3px; border-radius: 10px; padding: 2px; }
             .gps-link { font-size: 1em; width: 85%; padding: 10px; }
-            .terminal-box { font-size: 16px; } /* Ajustement texte terminal sur petit écran */
+            .terminal-box { font-size: 16px; }
+        }
+        
+        @media (min-width: 601px) and (max-width: 1024px) {
+            /* Ajustements spécifiques tablettes */
+            .pokemon-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+            .container { margin-top: 110px; padding: 20px; }
         }
 
         .chapter-section { display: none; }
@@ -232,7 +236,7 @@
 </head>
 <body>
 
-<!-- TERMINAL PLEIN ÉCRAN POUR L'ANALYSE -->
+<!-- TERMINAL MODAL PLEIN ÉCRAN -->
 <div id="global-scan-terminal" class="fullscreen-terminal-overlay">
     <div id="scan-terminal-content" class="terminal-box"></div>
 </div>
@@ -251,7 +255,7 @@
 <div id="yellow-overlay" class="yellow-fade-screen"></div>
 
 <div class="progress-container">
-    <div class="pokedex-title">⚡ POKÉDEX SYSTEM v4.3 ⚡</div>
+    <div class="pokedex-title">⚡ POKÉDEX SYSTEM v4.4 ⚡</div>
     <div id="pokedex-squares" class="pokedex-squares">□□□□□□□</div>
     <div id="progress-text" class="pokedex-text">0 / 7 anomalies réparées</div>
 </div>
@@ -700,7 +704,6 @@
         document.getElementById(`btn-ch${chapterNum}`).className = "btn-validate btn-validated";
     }
 
-    // --- NOUVELLE FONCTION DE SCAN EN PLEIN ÉCRAN ---
     function startScanningProcess(chapterNum, correctName) {
         if (progress.solved[chapterNum]) return;
 
@@ -730,14 +733,12 @@
         globalTerminal.style.display = "flex";
         
         if(chapterNum === 8 && answer === correctName) {
-            // Animation spéciale pour la fin
             termContent.innerHTML = "██████████████████<br><br>RECONSTRUCTION DU POKÉDEX EN COURS...";
             setTimeout(() => { termContent.innerHTML += "<br><br>Vérification finale... 15 %"; }, 800);
             setTimeout(() => { termContent.innerHTML += "<br>Extraction des données... 67 %"; }, 2000);
             setTimeout(() => { termContent.innerHTML += "<br><br>100 %<br><br>Connexion sécurisée avec le Labo Cerise établie."; }, 3200);
             setTimeout(() => { termContent.innerHTML += "<br><br>⚠️ Avertissement !<br>Signal extrêmement puissant détecté en approche !"; }, 4800);
         } else {
-            // Animation de scan classique
             termContent.innerHTML = "POKÉDEX RESTAURÉ ░░░░░░░░░░░░░░<br><br>Lancement de l'analyse visuelle...";
             setTimeout(() => { termContent.innerHTML += "<br><br>Lecture du Type et du Nom de la carte..."; }, 800);
             setTimeout(() => { termContent.innerHTML += "<br>Comparaison avec la base de données..."; }, 1800);
@@ -745,7 +746,6 @@
             setTimeout(() => { termContent.innerHTML += "<br>⚡ Traitement : 100 %<br><br>✓ Scan du Pokémon terminé."; }, 3500);
         }
 
-        // Fin de la séquence plein écran
         const waitTime = (chapterNum === 8 && answer === correctName) ? 6500 : 4500;
         
         setTimeout(() => {
