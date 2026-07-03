@@ -108,7 +108,7 @@
             justify-items: center;
         }
 
-        /* --- SÉCURISATION DU FORMAT PORTRAIT (APPLICABLE PARTOUT) --- */
+        /* --- FORMAT PORTRAIT --- */
         .pokemon-card {
             position: relative;
             border: 4px solid #bdc3c7;
@@ -120,8 +120,8 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            max-width: 240px; /* Évite l'étirement excessif sur tablette */
-            aspect-ratio: 2 / 3; /* FORCE LE FORMAT PORTRAIT (TYPE EN HAUT, NOM EN BAS) */
+            max-width: 240px;
+            aspect-ratio: 2 / 3;
             height: auto; 
             padding: 4px; 
             box-sizing: border-box;
@@ -129,20 +129,18 @@
             z-index: 1;
         }
 
-        /* Intégralité de la carte visible sans rognage */
         .pokemon-card img { 
             width: 100%; 
             height: 100%; 
-            object-fit: contain; /* L'image s'adapte entièrement à l'espace sans déborder ni être coupée */
+            object-fit: contain;
         }
         
-        /* ZOOM DE SÉLECTION PENSÉ POUR ÉCRAN TACTILE */
         .pokemon-card.selected {
             border-color: #f1c40f;
             background-color: #fef9e7;
-            transform: scale(1.15) rotate(1deg); /* Grossissement prononcé pour une lisibilité maximale */
+            transform: scale(1.15) rotate(1deg);
             box-shadow: 0 15px 30px rgba(241, 196, 15, 0.6);
-            z-index: 10; /* Passe au premier plan */
+            z-index: 10;
         }
 
         .scan-line {
@@ -174,7 +172,7 @@
         .msg-error { color: #c0392b; background-color: #fadbd8; padding: 10px; border-radius: 8px; }
         .msg-success { color: #196f3d; background: #d5f5e3; padding: 15px; border-radius: 8px; border: 2px solid #2ec4b6; line-height: 1.5; font-family: sans-serif; text-align: left;}
 
-        /* --- SPÉCIAL INTERFACE PLEIN ÉCRAN LORS DU SCAN --- */
+        /* --- INTERFACE DE SCAN TERMINAL --- */
         .fullscreen-terminal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -206,10 +204,26 @@
             text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             margin-top: 30px; display: none;
         }
+
+        /* --- CORRECTION ÉCRAN JAUNE : EFFET ATTACQUE TONNERRE DYNAMIQUE --- */
         .yellow-fade-screen {
             position: fixed; top:0; left:0; width:100vw; height:100vh;
-            background-color: #f1c40f; z-index: 999; opacity: 0; pointer-events: none;
-            transition: opacity 2s ease-in-out;
+            background-color: #f1c40f; z-index: 99999; opacity: 0; pointer-events: none;
+        }
+        
+        /* Classe d'animation déclenchée à la victoire (3 éclairs puis disparition totale) */
+        .lightning-flash-active {
+            animation: pikachu-thunderbolt 1.6s ease-out forwards;
+        }
+
+        @keyframes pikachu-thunderbolt {
+            0% { opacity: 0; }
+            15% { opacity: 0.85; }
+            25% { opacity: 0.15; }
+            40% { opacity: 0.9; }
+            50% { opacity: 0.1; }
+            65% { opacity: 0.95; }
+            100% { opacity: 0; } /* Revient à 0 pour ne pas gêner la lecture */
         }
 
         /* --- RESPONSIVE OPTIMISÉ POUR PORTABLES ET TABLETTES --- */
@@ -225,7 +239,6 @@
         }
         
         @media (min-width: 601px) and (max-width: 1024px) {
-            /* Ajustements spécifiques tablettes */
             .pokemon-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
             .container { margin-top: 110px; padding: 20px; }
         }
@@ -255,7 +268,7 @@
 <div id="yellow-overlay" class="yellow-fade-screen"></div>
 
 <div class="progress-container">
-    <div class="pokedex-title">⚡ POKÉDEX SYSTEM v4.4 ⚡</div>
+    <div class="pokedex-title">⚡ POKÉDEX SYSTEM v4.5 ⚡</div>
     <div id="pokedex-squares" class="pokedex-squares">□□□□□□□</div>
     <div id="progress-text" class="pokedex-text">0 / 7 anomalies réparées</div>
 </div>
@@ -350,7 +363,7 @@
         <div class="bubble">
             <span class="name-tag">Professeur Cerise</span>
             Cette fois, le Pokédex annonce une anomalie avec un Pokémon de type Eau. C'est étrange… je suis presque certain que ce Pokémon est en réalité de type Plante ! Mais effectivement, celui-ci semble être dans l’eau… et qu’y a-t-il dedans ? des balles ? des boules ? des bulles ? C’est étrange.<br><br>
-            Bon, vous avez compris comment fonctionne Zorua, il se sert du vrai nom du Pokémon pour créer une illusion. Parmi ces 6 nouveaux Pokémon, lequel de type plante, pourrait ressembler à ce que nous avons sous les yeux ? Dépêchez-vous avant que l'illusion ne disparaisse !
+            Bon, vous avez compris comment fonctionne Zorua, il se sert du vrai nom du Pokémon pour créer une illusion. Parmi ces 6 nouveaux Pokémon, lequel de type plante, pourrait ressembler à ce que nous avons sous les yeux ? Dépêchez-vous avant que l'illusion ne disparaaisse !
         </div>
     </div>
 
@@ -536,7 +549,6 @@
 </section>
 
 <script>
-    // Base de données des chapitres
     const CHAPTER_DATA = {
         2: { 
             pokemons: [
@@ -617,10 +629,9 @@
         }
     };
 
-    const STORAGE_KEY = 'pokemon_mission_progress_v4';
+    const STORAGE_KEY = 'pokemon_mission_progress_v5';
     let progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { currentChapter: 1, solved: {} };
 
-    // Désélection si clic à l'extérieur
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.pokemon-card') && !e.target.closest('button')) {
             document.querySelectorAll('.pokemon-card').forEach(card => {
@@ -726,7 +737,6 @@
         selected.classList.add('scanning');
         btn.style.display = 'none';
 
-        // Affichage du terminal plein écran
         const globalTerminal = document.getElementById('global-scan-terminal');
         const termContent = document.getElementById('scan-terminal-content');
         
@@ -792,13 +802,19 @@
         }
     }
 
+    // FONCTION MISE À JOUR : SCINTILLEMENT DE L'ATTAQUE TONNERRE PUIS DISPARITION
     function showVictory() {
         const victoryBox = document.getElementById('pikachu-card-victory');
         const yellowOverlay = document.getElementById('yellow-overlay');
 
-        yellowOverlay.style.opacity = "0.7"; 
+        // Déclenche l'animation de flashs successifs
+        yellowOverlay.classList.add('lightning-flash-active');
+        
         victoryBox.style.display = "block";
-        victoryBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        setTimeout(() => {
+            victoryBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
     }
 
     function unlockChapter(num) {
